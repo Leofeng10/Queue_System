@@ -1,0 +1,36 @@
+body{
+    --superFont: 20px;
+    --bigFont: 18px;
+    --mainFont: 16px;
+    --smallFont: 14px;
+}
+.icon_check{
+    mask-image: url('../../img/icons/my/check.svg');
+    mask-size: 36px;
+    color: 000;
+    background: linear-gradient(315deg, #ff4f18 0%, #f20000 100%);
+    height: 36px;
+    width: 36px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+.icon_quit{
+    mask-image: url('../../img/icons/my/quit.svg');
+    mask-size: 36px;
+    color: 000;
+    background: #fff;
+    height: 36px;
+    width: 36px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+.icon_delete{
+    mask-image: url('../../img/icons/my/delete.svg');
+    mask-size: 32px;
+    color: 000;
+    background: linear-gradient(315deg, #ff4f18 0%, #f20000 100%);
+    height: 32px;
+    width: 32px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
