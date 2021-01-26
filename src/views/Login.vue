@@ -306,7 +306,7 @@ export default {
 				if(info.data.code === 0){
 					let orderinfo = await this.getOrderInfo(info.data.orderId)
 					this.checkOrder(orderinfo.data.doc)
-					this.$router.push('/pot')
+					
 				}else{
 					this.$toast.fail('开桌时遇到错误')
 				}
@@ -346,7 +346,7 @@ export default {
 			this.$cookies.set('orderId', orderinfo._id,'4h')
 			localStorage.setItem('tableName', orderinfo.table)
 			if(orderinfo.orderContent.length === 0){
-				this.$router.push('/pot')
+				
 			}else{
 				this.$router.push('/')
 			}
