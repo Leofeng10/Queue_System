@@ -13,10 +13,10 @@
       </div>
       <div style="padding-top: 20px">
         <nut-tab class="login-tab" @tab-switch="tabSwitch">
-          <nut-tab-panel tab-title="短信登录" style="font-size:22px">
+          <nut-tab-panel tab-title="短信登录" style="font-size:22px;">
             <div class="login-first">
               <cube-input
-                style="background-color: #c6e3f1"
+                style="background-color: white; border: solid 1px gray;"
                 type="number"
                 v-model="loginInfo.phone"
                 :placeholder="lang === 'ch' ? '电话号码' : 'PHONE'"
@@ -25,7 +25,7 @@
             <div class="login-second">
               <div>
                 <cube-input
-                  style="background-color: #c6e3f1"
+                  style="background-color: white; border: solid 1px gray;"
                   v-model="loginInfo.otpcode"
                   :placeholder="lang === 'ch' ? '验证码' : 'OTP'"
                   :eye="{ visible: false, blurHidden: true }"
@@ -46,10 +46,10 @@
               </div>
             </div>
           </nut-tab-panel>
-          <nut-tab-panel tab-title="密码登录">
+          <nut-tab-panel tab-title="密码登录"  style="font-size:22px">
             <div class="login-first">
               <cube-input
-                style="background-color: #c6e3f1; width: 296px"
+                style="background-color: white; width: 296px; border:1px solid gray;"
                 type="number"
                 v-model="loginInfo.phone"
                 :placeholder="lang === 'ch' ? '电话号码' : 'PHONE'"
@@ -57,7 +57,7 @@
             </div>
             <div class="login-second">
               <cube-input
-                style="background-color: #c6e3f1; width: 296px"
+                style="background-color: white; width: 296px; border: solid 1px gray;"
                 type="password"
                 v-model="loginInfo.password"
                 :placeholder="lang === 'ch' ? '用户密码' : 'Password'"
@@ -187,7 +187,8 @@ export default {
           otpcode: this.loginInfo.otpcode,
           orderId: cookieId,
         }
-      );
+	  );
+	  
       console.log(loginInfo);
       if (loginInfo.data.code === 200) {
         console.log("done");
@@ -260,6 +261,7 @@ export default {
 }
 .login-tab /deep/ .nut-tab {
   padding: 0;
+ 
 }
 .login-tab /deep/ .nut-tab .nut-tab-title .nut-title-nav-list .nut-tab-link {
   font-size: var(--mainFont);

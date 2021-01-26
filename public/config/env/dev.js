@@ -1,7 +1,7 @@
 //server setting
-const dev = '//192.168.1.5:3000'
+const dev = '//192.168.0.255:3004'
 //server socket port setting
-const socketPort = '//192.168.1.5:3001'
+const socketPort = '//192.168.0.255:3005'
 
 export default {
    server : dev,

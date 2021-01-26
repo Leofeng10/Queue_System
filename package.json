@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@nutui/nutui": "^2.2.11",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "cube-ui": "^1.12.44",
     "lodash.throttle": "^4.1.1",

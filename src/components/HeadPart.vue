@@ -1,38 +1,72 @@
 <template>
 	<div id="headpart">
 		<div class="headpart_left">
-			<i v-if="isViewMode" class="cubeic-back" @click="trunBack()">{{lang==='en'?'Back':'返回'}}</i>
-			<div v-else  class="headpart_right_item" @click="logoOut()">
-				{{tableName || lang==='en'?tableName :tableName}}
+			<div @click="logOutMethod()">
+				<img src="../../public/img/pic/logoutImage.svg" alt="" style="width:30px;height:30px">
 			</div>
 		</div>
 		<div class="headpart_center">
-			<div class="override">
-				<nut-buttongroup style="width: 260px">
-					<nut-button style="border-radius: 2px; font-size: 16px; padding: 0" :type="isHomePage? 'light' : ''" @click="changePage('pot')">{{lang === 'en'? 'POT SOUP': '锅底'}}</nut-button>
-					<nut-button style="border-radius: 2px; font-size: 16px; padding: 0" :type="isHomePage? '': 'light'" @click="changePage('product')">{{lang === 'en'? 'PRODUCT' : '菜品'}}</nut-button>
-				</nut-buttongroup>
-			</div>
+			{{nowTime}}
 		</div>
+
 		<div class="headpart_right">
-			<div v-if="!isViewMode" >
-				<div v-if="memberInfo.phone" class="headpart_right_item" @click="openMemberInfoBox()">
-					{{ memberInfo.phone }}
-				</div>
-				<div v-else style="width:150px; text-align: right;" class="headpart_right_item" @click="openLoginBox()">
-					{{lang==='en'?'Member Login' :'会员登录'}}
-				</div>
-			</div>
-			<div style="padding-right:50px" class="headpart_right_item">
-				<nut-button style="width:88px; height: 38px; font-size: var(--mainFont); border-radius: 2px;" @click="changeLanguageMethod()" type="light" color="#000000" small>{{lang==='en'?'中文':'English'}}</nut-button>
+			
+			<div @click="openSettingMethod()">
+				<img src="../../public/img/pic/setting_icon.svg" alt="" style="width:30px;height:30px">
 			</div>
 			
 		</div>
+
+
+		<nut-popup v-model="isShowConfirmBox" style=" color: #666; width:30%;height: 350px; border-radius:30px;" :z-index="11" >
+			<div style="background-color: #202a39; height:15%">
+
+			</div>
+			<div style="display:flex; justify-content:center; height:60%; align-items:center; font-size:30px;">
+				{{lang === "en" ? "Confirm to log out" : "确认退出"}}
+			</div>
+			<div>
+ 			<div style="display: flex; justify-content: space-around;">
+        		<div style="margin: 0 10px">
+					<nut-button
+						type="light"
+						@click="isShowConfirmBox = false"
+						style="padding:10px 50px 10px 50px;"
+						>{{ lang === "en" ? "Cancel" : "取消" }}</nut-button
+					>
+        		</div>
+				<div style="margin: 0 10px;">
+				<nut-button
+					@click="confiormMethods()"
+					style="padding:10px 50px 10px 50px;"
+					>{{ lang === "en" ? "Confirm" : "确定" }}</nut-button
+				>
+				</div>
+      		</div>
+			</div>
+		</nut-popup>
 	</div>
+
+	
 </template>
  
+
+
 <script>
+
 export default {
+	mounted(){
+		this.nowTimes();
+	},
+	
+	data(){
+		return {
+			nowTime:'',
+			isShowConfirmBox:false
+		}
+	},
+
+
 	computed:{
         lang(){
             return this.$store.state.language
@@ -57,14 +91,16 @@ export default {
 		}
 	},
 	methods:{
-		openMemberInfoBox(){
-			console.log(111)
-			this.$store.dispatch('setShowMemberboxMode', true)
+		openSettingMethod(){
+			this.$router.push('/setup')
 		},
-		changePage(path){
-			this.isHomePage && path === 'pot' && this.$router.push('/pot')
-			!this.isHomePage && path === 'product' && this.$router.push('/')
+		confiormMethods(){
+			this.$router.push('/login')
 		},
+		logOutMethod(){
+			this.isShowConfirmBox = true
+		},
+	
 		trunBack(){
 			this.$router.push('/login')
 		},
@@ -82,8 +118,29 @@ export default {
                 this.$store.dispatch('setLanguage', 'en')
                 localStorage.setItem('language','en')
             }
+		},
+		timeFormate(timeStamp) {
+			let year = new Date(timeStamp).getFullYear();
+			let month =new Date(timeStamp).getMonth() + 1 < 10? "0" + (new Date(timeStamp).getMonth() + 1): new Date(timeStamp).getMonth() + 1;
+			let date =new Date(timeStamp).getDate() < 10? "0" + new Date(timeStamp).getDate(): new Date(timeStamp).getDate();
+			let hh =new Date(timeStamp).getHours() < 10? "0" + new Date(timeStamp).getHours(): new Date(timeStamp).getHours();
+			let mm =new Date(timeStamp).getMinutes() < 10? "0" + new Date(timeStamp).getMinutes(): new Date(timeStamp).getMinutes();
+			let ss =new Date(timeStamp).getSeconds() < 10? "0" + new Date(timeStamp).getSeconds(): new Date(timeStamp).getSeconds();
+			this.nowTime = hh+":"+mm+':'+ss + "  " + date + "/" + month + "/"+ year;
+
+		},
+		nowTimes(){
+		this.timeFormate(new Date());
+		setInterval(this.nowTimes,1000);
+		this.clear()
+		},
+		clear(){
+		clearInterval(this.nowTimes)
+		this.nowTimes = null;
 		}
+		
 	}
+
 }
 </script>
 
@@ -91,39 +148,30 @@ export default {
 #headpart{
 	width: 100%;
 	background-color: #202a39;
-	display: flex;
-	justify-content: space-around;
+	display: flex;	
 	height: 64px;
 	align-items: center;
+	justify-content: space-between;
 }
 .headpart_left{
-	display: flex;
-	color: #fff;
-	font-size: 18px;
-	font-weight: 700;
+
 	align-items: center;
-	flex-basis: 33%;
-	padding-left: 10px;
+	padding: 20px;
+
 }
 .headpart_center{
-	flex-basis: 33%;
-	display: flex;
-    justify-content: center;
+	
+	color:white;
+	width: 300px;
+	font-size: 30px;
+	
 }
 .headpart_right{
-	display: flex;
-	color: #fff;
-	font-size: 18px;
-	font-weight: 700;
-	align-items: center;
-	flex-basis: 33%;
-	justify-content: flex-end;
+	margin-right: 10px;
+	justify-items: flex-end;
+
 }
-.headpart_right_item{
-	width: 78px;
-	text-align: center;
-	margin: 0 8px;
-}
+
 .override{
 	width: 262px;
 	background-color: #fff;
@@ -133,4 +181,7 @@ export default {
 	border-radius: 2px;
 	height: 44px;
 }
+
+
 </style>
+

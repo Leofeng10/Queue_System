@@ -4,7 +4,7 @@
         <div style="height: 48px"></div>
         <div class="pot_body" ref="mainbody">
             <div class="pot_left">
-                <div class="pot_left_top">
+                <!-- <div class="pot_left_top">
                     <nut-button class="pot_left_top_item" :type="potType != 1? 'dashed': null" @click="chooseThisPotType(1)">
                         {{lang==='en'? 'Single Pot': '单锅'}}
                     </nut-button>
@@ -14,7 +14,16 @@
                     <nut-button class="pot_left_top_item" :type="potType != 4? 'dashed': null" @click="chooseThisPotType(4)">
                         {{lang==='en'? 'Four In One Pot': '四宫格'}}
                     </nut-button>
+                </div> -->
+                <div  style="display:flex;">
+                     <div  v-for="item in potList" :key="item.name">
+                         <nut-button class="pot_left_top_item" @click="chooseThisPotType(item.index)">
+                            {{lang==='en'? item.name_en: item.name}}
+                        </nut-button>
+                    </div>
+
                 </div>
+               
                 <div class="pot_left_center_base">
                     <div v-if="potType === 1" style="width: 100%; height: 100%;">
                         <!-- <img v-for="item in chooseSoup.filter((item,index) => index === 0)" :key="item._id" style="object-fit: cover; width: 100%; height: 100%;" :src="item.image | imgurl"> -->
@@ -200,6 +209,7 @@
     </div>
 </template>
 <script>
+import axios from "axios";
 import HeadPart from '../components/HeadPart'
 import memberBox from '../components/Member'
 import memberInfo from '../components/MemberInfo'
@@ -216,6 +226,8 @@ export default {
     },
     mounted(){
         this.pageInitMethod()
+        this.getpotList();
+       console.log(this.potList)
     },
     computed:{
 		lang(){
@@ -244,10 +256,32 @@ export default {
             potImage: require('../../public/img/pot/pot1.jpg'),
             defaultImage: 'this.src="' + require('../../public/img/logo/login_row.png') + '"',
             isShowTastePopup: false,
-            tempSoupInfo: {}
+            tempSoupInfo: {},
+            // potList:[{name:"单锅",name_en:"single", index:1},{name:"双锅",name_en:"double", index:2},{name:"三锅",name_en:"three", index:3}]
+            potList:[{name:"单锅", name_en:"Single Pot", index:1},{name:"鸳鸯锅", name_en:"Double Pot", index:2},{name:"四合一锅", name_en:"Four in one Pot", index:4}],
         }
     },
     methods:{
+          async getpotList(){
+            await this.$axios.post(this.$sysConfig.server + '/potType/getPot').then(doc=>{
+                console.log(doc)
+                this.potList = doc.data.doc
+            }
+            )
+            console.log("here is the pot list" + this.potList)
+        },
+
+
+
+
+
+
+
+
+
+
+
+
         async pageInitMethod(){
             try {
                 await this.startLoading()

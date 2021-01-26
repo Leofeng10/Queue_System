@@ -7,210 +7,55 @@
 		</div>
 		<div class="login_center" ref="maincenter">
 			<div class="login_center_img">
-				<img src="../../public/img/login/loginImg.png">
+				<img :src="BackgroundImage | imgurl" alt="获取失败">
 			</div>
 			<div class="login_center_body">
 				<div class="login_center_body_top">
-					<img src="../../public/img/logo/mainLogo.png">
+					<img :src="Image | imgurl" alt="获取失败">
 				</div>
-				<div>
-					<div style="margin-bottom: 10px">
-						<cube-button style="width: 220px" :light="true" @click="openStaffBox()">{{lang==='en'?'Select Table No' :'选择桌号'}}</cube-button>
+				<div style=" color: #666; background-color:white; border-radius:10px;" class="home_success" :close-on-click-overlay="false" :z-index="11" get-container="#home">
+				
+					<div style="font-size: 18px; margin-top:20px">
+						{{lang==='en'? "Staff Log In":"请使用员工账号登录"}}
 					</div>
-					<div v-if="lang==='en'">
-						<cube-button style="width: 220px" :light="true" @click="viewMenu()">View Menu</cube-button>
+					<div style="padding: 18px;">
+						<div style="padding-bottom: 10px">
+							<cube-input v-model="staffInfo.userName" placeholder="STAFF NAME"></cube-input>
+						</div>
+						<div style="padding-bottom: 10px">
+							<cube-input type="password" v-model="staffInfo.password" placeholder="PASSWORD" :eye="{visible: false, blurHidden: true}"></cube-input>
+						</div>
 					</div>
-					<div v-else>
-						<cube-button style="width: 220px" :light="true" @click="viewMenu()">预览菜单</cube-button>
+					<div style="display: flex">
+						<div style="margin: 0 10px">
+							<nut-button type="light" @click="cancelMethod()">{{lang==='en'? "Cancel": "取消"}}</nut-button>
+						</div>
+						<div style="margin: 0 10px">
+							<nut-button @click="loginMethod()">{{lang==='en'? "Confirm": "确认"}}</nut-button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="login_bar"></div>
 
-		<nut-popup v-model="isShowPopup" style="width: 780px">
-			<div class="login_popup_title">
-				{{lang==='en'? 'Select Table No': '选择桌号'}}
-			</div>
-			<div class="login_popup_body">
-				<div v-for="table in tableList" :key="table._id" class="login_popup_body_item" :class="{login_popup_body_item_actve: table.status}" @click="showTableButtone(table)">
-					<div>
-						{{table.tableName}}
-					</div>
-				</div>
-			</div>
-		</nut-popup>
 
-		<nut-popup v-model="isShowOpenTable" style="width: 388px" >
-				<div class="login_popup_title">
-					{{lang==='en'? 'Open Table': '开桌'}}
-				</div>
-				<div style="padding: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-					<div style="font-size: var(--superFont); font-weight: 700; color: #666; line-height: 38px;">
-						{{tempTableInfo.tableName}}
-					</div>
-					<div style="font-size: var(--mainFont); line-height: 58px; border-top: 1px solid #bababa; color: #999">
-						{{tempTableInfo.tableNote}}
-					</div>
-					<div>
-						<nut-stepper class="login_stepper" :value.sync="paxNumber" :min="0" :max="10" @add-no-allow="addNoAllow" @reduce-no-allow="reduceNoAllow"></nut-stepper>
-					</div>
-				</div>
-				<div v-if="systemInfo.restaurantType==='buffet'">
-					<div v-if="buffetSetArray.length != 0" style="display: flex; justify-content: space-around;padding-top:10px">
-						<div v-for="item in buffetSetArray" :key="item._id" class="control_dialog_item" :class="{control_dialog_item_active: chooseBuffetSet === item}" @click="chooseBuffetSetMethod(item)">
-							{{lang === 'en'? item.name_en: item.name_ch}}
-						</div>
-					</div>
-				</div>
-				<div style="display: flex; justify-content: space-around; padding: 20px">
-					<nut-button type="light" @click="isShowOpenTable = false">{{lang==='en'? "Cancel": "取消"}}</nut-button>
-					<nut-button style="margin-left: 10px" @click="ThrottleConfirmOpenTable()">{{lang==='en'? "Submit": "确定"}}</nut-button>
-				</div>
-			</nut-popup>
 
-		<nut-popup v-if="tempTableInfo" v-model="isShowTableButton" style="width: 398px" :close-on-click-overlay="false">
-			<div class="login_popup_title" style="font-size: var(--superFont); line-height: 68px; height: 68px">
-				{{tempTableInfo.tableName}}
-				<div v-if="tempTableInfo.takeaway" class="login_popup_title_takeaway">
-					<img src="../../public/img/icons/my/takeaway.svg">
-				</div>
-			</div>
-			<div v-if="tempTableInfo.orderId" class="login_popup_top">
-				<div class="login_popup_top_item">
-					<div style="display: flex">
-						<div class="login_popup_top_item_img">
-							<img style="width: 28px;" src="../../public/img/icons/my/calendar.svg">
-						</div>
-						<div>
-							{{lang === 'ch'? '开桌时间': 'Start Time'}}
-						</div>
-					</div>
-					<div class="login_popup_top_item_right" style="font-size: var(--superFont);">
-						{{new Date(tempTableInfo.orderId.createDate).toLocaleDateString()}} {{new Date(tempTableInfo.orderId.createDate).getHours()}}:{{new Date(tempTableInfo.orderId.createDate).getMinutes()}}
-					</div>
-				</div>
-				<div class="login_popup_top_item login_popup_top_item_other">
-					<div style="display: flex">
-						<div style="display: flex">
-							<div class="login_popup_top_item_img">
-								<img style="width: 28px;" src="../../public/img/icons/my/Personal.svg">
-							</div>
-							<div style="width: 76px;">
-								{{lang === 'ch'? '用餐人数': 'PAX'}}
-							</div>
-						</div>
-						<div class="login_popup_top_item_right_other" style="color: #498ac2; font-size: var(--superFont); font-weight: 700;">
-							{{tempTableInfo.orderId.pax}}
-						</div>
-					</div>
-					<div style="display: flex">
-						<div style="display: flex">
-							<div class="login_popup_top_item_img" style="padding-top: 1px">
-								<img style="width: 28px;" src="../../public/img/icons/my/vip.svg">
-							</div>
-							<div style="width: 76px;">
-								{{lang === 'ch'? '登录会员': 'Member'}}
-							</div>
-						</div>
-						<div class="login_popup_top_item_right_other">
-							<span v-if="tempTableInfo.orderId.member_id" style="color: #ffba2d; font-size: var(--superFont); font-weight: 700;">YES</span>
-							<span v-else style="color: #666; font-size: var(--superFont); font-weight: 700;">NO</span>
-						</div>
-					</div>
-				</div>
-				<div class="login_popup_top_item login_popup_top_item_other">
-					<div style="display: flex">
-						<div style="display: flex">
-							<div class="login_popup_top_item_img" style="padding-top: 3px; height: 48px">
-								<img style="width: 28px;" src="../../public/img/icons/my/food.svg">
-							</div>
-							<div style="width: 76px;">
-								{{lang === 'ch'? '菜品数量': 'Product'}}
-							</div>
-						</div>
-						<div class="login_popup_top_item_right_other" style="color: #abca4e; font-size: var(--superFont); font-weight: 700;">
-							{{tempTableInfo.orderId.productNumber}}
-						</div>
-					</div>
-					<div style="display: flex">
-						<div style="display: flex">
-							<div class="login_popup_top_item_img" style="padding-top: 4px; height: 48px">
-								<img style="width: 28px;" src="../../public/img/icons/my/checked.svg">
-							</div>
-							<div style="width: 76px;">
-								{{lang === 'ch'? '已上数量': 'Checked'}}
-							</div>
-						</div>
-						<div class="login_popup_top_item_right_other" style="color: #95a9b7; font-size: var(--superFont); font-weight: 700;">
-							{{tempTableInfo.orderId.checkedProductNumber}}
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="login_popup_bottom_choose" @click="chooseTable()">
-				{{lang==='en'? "Enter": '选择'}}
-			</div>
-			<div style="display: flex">
-				<div @click="changeTabel()" class="login_popup_bottom_change">
-					{{lang==='en'? "Change": '换桌'}}
-				</div>
-				<div @click="closeTable()" class="login_popup_bottom_close">
-					{{lang==='en'? "Close": '关台'}}
-				</div>
-			</div>
-			<div @click="isShowTableButton = false" class="login_popup_bottom_cancel">
-				{{lang==='en'? "Cancel": "取消"}}
-			</div>
-		</nut-popup>
-
-		<nut-popup v-model="isShowEmptyTable" style="width: 338px" >
-			<div class="login_popup_title">
-				{{lang==='en'? 'Free Table': '空闲餐桌'}}
-			</div>
-			<div class="login_popup_body">
-				<div v-for="table in tableList.filter(item => !item.status)" :key="table._id" class="login_popup_body_item" @click="chooseEmptyTable(table)">
-					<div>
-						{{table.tableName}}
-					</div>
-				</div>
-			</div>
-			<div style="display: flex; justify-content: space-around; padding: 20px">
-				<nut-button type="light" @click="isShowEmptyTable = false">{{lang==='en'? "Cancel": "取消"}}</nut-button>
-			</div>
-		</nut-popup>
-
-		<nut-popup v-model="isShowStaffBox" style=" color: #666;" class="home_success" :close-on-click-overlay="false" :z-index="11" get-container="#home">
-			<div style="font-size: 18px">
-				{{lang==='en'? "Staff Log In":"请使用员工账号选择餐桌"}}
-			</div>
-			<div style="padding: 18px;">
-				<div style="padding-bottom: 10px">
-					<cube-input v-model="staffInfo.userName" placeholder="STAFF NAME"></cube-input>
-				</div>
-				<div style="padding-bottom: 10px">
-					<cube-input type="password" v-model="staffInfo.password" placeholder="PASSWORD" :eye="{visible: false, blurHidden: true}"></cube-input>
-				</div>
-			</div>
-			<div style="display: flex">
-				<div style="margin: 0 10px">
-					<nut-button type="light" @click="cancelMethod()">{{lang==='en'? "Cancel": "取消"}}</nut-button>
-				</div>
-				<div style="margin: 0 10px">
-					<nut-button @click="loginMethod()">{{lang==='en'? "Confirm": "确认"}}</nut-button>
-				</div>
-			</div>
-		</nut-popup>
 	</div>
 </template>
 
 <script>
 import Throttle from  'lodash.throttle'
+import axios from "axios";
 
 export default {
+	created(){
+		this.getSetupInfoMethod()
+	},
 	mounted(){
 		this.pageInitMethod()
 		this.getBuffetSetArray()
+		
 	},
 	computed:{
         lang(){
@@ -233,11 +78,13 @@ export default {
     },
 	data(){
 		return{
+			Image:null,
+			BackgroundImage:null,
 			isShowPopup: false,
 			number: 0,
 			tableList: [],
 			toastLoading: null,
-			isShowStaffBox: false,
+			isShowStaffBox: true,
 			staffInfo: {},
 			isShowOpenTable: false,
 			paxNumber: 0,
@@ -247,10 +94,31 @@ export default {
 			isShowMergeTable: false,
 			mergeFromTableInfo: {},
 			buffetSetArray: [],
-			chooseBuffetSet: null
+			chooseBuffetSet: null,
+			
 		}
 	},
 	methods:{
+		getSetupInfoMethod(){
+            let localPrinterUrl = null
+            if(localStorage.getItem('emenuSetting')){
+                JSON.parse(localStorage.getItem('emenuSetting'))
+                this.printerAddress = localPrinterUrl && localPrinterUrl.printerServer || null
+            }
+            axios.post(this.$sysConfig.server + "/setup/get").then(doc =>{
+                if(doc.data.code === 0){
+                    this.Image = doc.data.doc.image
+                    this.BackgroundImage = doc.data.doc.backgroundimage
+					
+                    console.log("7777777")
+                    console.log(doc.data.doc)
+					
+                }
+				
+            }).catch(err =>{
+                console.log(err)
+            })
+        },
 		ThrottleConfirmOpenTable: Throttle(function(){
             this.confirmOpenTable()
         }, 5000, {
@@ -329,7 +197,8 @@ export default {
             console.log(checkInfo)
             if(checkInfo.data.code === 200){
                 this.isShowStaffBox = false
-                this.openTablePopup()
+				this.$router.push('/')
+                // this.openTablePopup()
             }else if(checkInfo.data.code === 404 || checkInfo.data.code === 405){
                 this.$toast.fail('用户名或密码错误')
             }else{
@@ -565,6 +434,7 @@ export default {
 }
 .login_center_body{
 	position: absolute;
+	
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -702,5 +572,9 @@ export default {
 	font-size: var(--superFont);
 	line-height: 68px; 
 	color: #666;
+}
+.home_success{
+	width: 300px;
+	height: 250px;
 }
 </style>

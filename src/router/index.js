@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import memberinfo from '../components/MemberInfo.vue'
-import Memberinfopage from '../views/Memberinfopage.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,15 +26,12 @@ const routes = [
     component: () => import('../views/Check.vue')
   },
   {
-    path: '/memberinfopage',
-    name: 'memberinfopage',
-    component: Memberinfopage
-  },
-  {
-    path: '/memberinfo',
-    name: 'memberinfo',
-    component: memberinfo
+    path: '/setup',
+    name: 'setup',
+    component: () => import('../views/setup.vue')
   }
+
+
 ]
 
 const router = new VueRouter({

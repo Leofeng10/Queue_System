@@ -11,12 +11,18 @@
         <div class="member_top_logo">
           <img src="../../public/img/logo/login_row.png" />
         </div>
-        <div
-          style="font-size: var(--bigFont); color: #fff; cursor: pointer;"
+        <div style="display: flex; flex-direction:column; justify-content: space-between;" >
+          <div  style="font-size: var(--bigFont); color: #fff; cursor: pointer;  display: flex; justify-content: flex-end;">
+            <span @click="logOutMethod">{{ lang === "en" ? "Log Out" : "退出登录" }}</span>
+          </div>
+          <div
+          style="font-size: var(--bigFont); color: #fff; cursor: pointer; "
           @click="openMemberInfo"
         >
           {{ lang === "en" ? "Member Info" : "查看详细会员信息" }}
         </div>
+        </div>
+        
       </div>
       <div style="padding: 20px; display: flex; flex-direction: column;">
         <div style="display: flex; justify-content: center; height: 38px">
@@ -78,6 +84,11 @@ export default {
     };
   },
   methods: {
+    logOutMethod(){
+      window.localStorage.removeItem('memberInfo');
+      this.$store.dispatch("setShowMemberboxMode", false);
+      this.$router.push("")
+    },
     cancelMethod() {
       this.$store.dispatch("setShowMemberboxMode", false);
     },
@@ -103,12 +114,13 @@ export default {
   height: 140px;
   width: 308px;
   display: flex;
-  align-items: flex-end;
+  
   justify-content: space-between;
   padding: 20px;
   padding-bottom: 20px;
 }
 .member_top_logo {
+  align-self: flex-end;
   width: 120px;
   height: 120px;
   background-color: rgba(255, 255, 255, 1);
