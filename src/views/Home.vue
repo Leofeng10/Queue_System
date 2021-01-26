@@ -63,21 +63,35 @@
     </div>
 
     <!-- Body starts -->
-    <!-- Navbar -->
-    <div class="navbar">
-      <div
-        v-for="(item, index) in capacityArray"
-        v-bind:key="index"
-        class="capacity"
-      >
-        <div v-if="item.choosed" class="choosed">{{ item.name }}</div>
-        <div v-else>{{ item.name }}</div>
-      </div>
-    </div>
-
-    <!-- Tables -->
     <div>
-      
+      <!-- Left part -->
+      <div style="width: 70%">
+        <!-- Navbar -->
+        <div class="navbar">
+          <div
+            v-for="(item, index) in capacityArray"
+            v-bind:key="index"
+            class="capacity"
+          >
+            <div v-if="item.choosed" class="choosed">{{ item.name }}</div>
+            <div v-else>{{ item.name }}</div>
+          </div>
+        </div>
+
+        <!-- Tables -->
+        <div class="container">
+          <div v-for="(item, index) in tableArray" v-bind:key="index" class="table">
+            <div style="">{{ item.num }}</div>
+            <div style="display: flex; justify-content: flex-end;">
+              <div style="position: relative;">{{ item.cap }}</div>
+              <img src="../../public/img/icons/person.svg" alt="people">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- right part -->
+      <div>
+      </div>
     </div>
   </div>
 </template>
@@ -141,6 +155,52 @@ export default {
           choosed: false,
         },
       ],
+      tableArray: [
+        {
+          num: 1,
+          cap: 4
+        },
+        {
+          num: 2,
+          cap: 2
+        },
+        {
+          num: 3,
+          cap: 6
+        },
+        {
+          num: 4,
+          cap: 4
+        },
+        {
+          num: 5,
+          cap: 4
+        },
+        {
+          num: 6,
+          cap: 2
+        },
+        {
+          num: 7,
+          cap: 4
+        },
+        {
+          num: 8,
+          cap: 8
+        },
+        {
+          num: 9,
+          cap: 2
+        },
+        {
+          num: 10,
+          cap: 4
+        },
+        {
+          num: 11,
+          cap: 6
+        },
+      ]
     };
   },
   methods: {
@@ -263,5 +323,23 @@ export default {
   width: 100%;
   line-height: 34px;
   text-align: center;
+}
+.container {
+  display: grid;
+  margin-left: 30px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 20px 0;
+}
+.table {
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #dddddd;
+  border-radius: 20px;
+  height: 80px;
+  width: 120px;
+}
+.table img {
+  width: 25px;
+  height: 20px;
 }
 </style>
