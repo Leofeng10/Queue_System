@@ -73,17 +73,27 @@
             v-bind:key="index"
             class="capacity"
           >
-            <div v-if="item.choosed" class="choosed">{{ item.name }}</div>
-            <div v-else>{{ item.name }}</div>
+            <div @click="changePage(item)" :class="item.choosed ? 'choosed' : ''">{{ item.name }}</div>
           </div>
         </div>
 
         <!-- Tables -->
         <div class="container">
-          <div v-for="(item, index) in tableArray" v-bind:key="index" class="table">
-            <div style="">{{ item.num }}</div>
-            <div style="display: flex; justify-content: flex-end;">
-              <div style="position: relative;">{{ item.cap }}</div>
+          <div
+            v-for="(item, index) in tableArray" 
+            v-bind:key="index"
+            v-if="item.capacity <= maxCap && item.capacity > minCap"
+            class="table"
+            :class="item.capacity <= 2
+                      ? (item.status ? 'table1' : 'table1_2')
+                      : item.capacity <= 4 ? (item.status ? 'table2' : 'table2_2')
+                                      : item.capacity <= 8 ? (item.status ? 'table3' : 'table3_2')
+                                                      : item.status ? 'table4' : 'table4_2'"
+          >
+            <div style="height: 20px; width: 100%;"></div>
+            <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
+            <div style="display: flex; width: 100%; justify-content: flex-end;">
+              <div style="position: relative;">{{ item.capacity }}</div>
               <img src="../../public/img/icons/person.svg" alt="people">
             </div>
           </div>
@@ -133,72 +143,95 @@ export default {
     return {
       nowTime: "",
       isShowConfirmBox: false,
+      maxCap: 10,
+      minCap: 0,
       capacityArray: [
         {
+          index: 0,
           name: "All",
+          num: 0,
           choosed: true,
         },
         {
+          index: 1,
           name: "2",
+          num: 2,
           choosed: false,
         },
         {
+          index: 2,
           name: "4",
+          num: 4,
           choosed: false,
         },
         {
+          index: 3,
           name: "8",
+          num: 8,
           choosed: false,
         },
         {
+          index: 4,
           name: ">8",
+          num: 100,
           choosed: false,
         },
       ],
       tableArray: [
         {
           num: 1,
-          cap: 4
+          capacity: 4,
+          status: true // true means occupied
         },
         {
           num: 2,
-          cap: 2
+          capacity: 2,
+          status: true
         },
         {
           num: 3,
-          cap: 6
+          capacity: 6,
+          status: true
         },
         {
           num: 4,
-          cap: 4
+          capacity: 4,
+          status: true
         },
         {
           num: 5,
-          cap: 4
+          capacity: 4,
+          status: true
         },
         {
           num: 6,
-          cap: 2
+          capacity: 2,
+          status: true
         },
         {
           num: 7,
-          cap: 4
+          capacity: 4,
+          status: false
         },
         {
           num: 8,
-          cap: 8
+          capacity: 8,
+          status: true
         },
         {
           num: 9,
-          cap: 2
+          capacity: 2,
+          status: true
         },
         {
           num: 10,
-          cap: 4
+          capacity: 4,
+          status: true
         },
         {
           num: 11,
-          cap: 6
+          capacity: 6,
+          status: false
         },
       ]
     };
@@ -266,6 +299,19 @@ export default {
       clearInterval(this.nowTimes);
       this.nowTimes = null;
     },
+    changePage(item) {
+      this.capacityArray.forEach((el) => {
+        el.choosed = false;
+      })
+      item.choosed = true;
+      if (item.index === 0) {
+        this.minCap = 0;
+        this.maxCap = 100;
+      } else {
+        this.minCap = this.capacityArray[item.index - 1].num;
+        this.maxCap = item.num;
+      }
+    }
   },
 };
 </script>
@@ -333,6 +379,8 @@ export default {
 .table {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border: 4px solid #dddddd;
   border-radius: 20px;
   height: 80px;
@@ -341,5 +389,41 @@ export default {
 .table img {
   width: 25px;
   height: 20px;
+}
+.table1 {
+  background-color: #74b9ff;
+  border: 4px solid #74b9ff;
+  color: #ffffff;
+}
+.table1_2 {
+  border: 4px solid #74b9ff;
+  color: #74b9ff;
+}
+.table2 {
+  background-color: #f8c291;
+  border: 4px solid #f8c291;
+  color: #ffffff;
+}
+.table2_2 {
+  border: 4px solid #f8c291;
+  color: #f8c291;
+}
+.table3 {
+  background-color: #a29bfe;
+  border: 4px solid #a29bfe;
+  color: #ffffff;
+}
+.table3_2 {
+  border: 4px solid #a29bfe;
+  color: #a29bfe;
+}
+.table4 {
+  background-color: #b8e994;
+  border: 4px solid #b8e994;
+  color: #ffffff;
+}
+.table4_2 {
+  border: 4px solid #b8e994;
+  color: #b8e994;
 }
 </style>
