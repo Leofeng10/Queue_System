@@ -63,7 +63,7 @@
     </div>
 
     <!-- Body starts -->
-    <div>
+    <div id="body">
       <!-- Left part -->
       <div style="width: 70%">
         <!-- Navbar -->
@@ -100,6 +100,7 @@
         </div>
       </div>
       <!-- right part -->
+      <Qlist/>
       <div>
       </div>
     </div>
@@ -107,12 +108,10 @@
 </template>
 
 <script>
-import CubePage from "../components/CubePage";
+import Qlist from './Qlist.vue';
 
 export default {
-  components: {
-    CubePage,
-  },
+  components: { Qlist },
   computed: {
     lang() {
       return this.$store.state.language;
@@ -353,6 +352,10 @@ export default {
   align-items: center;
   height: 80px;
   margin-left: 20px;
+}
+/* body starts */
+#body {
+  display: flex;
 }
 .capacity {
   border: 2px solid #dddddd;
