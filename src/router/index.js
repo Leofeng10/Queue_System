@@ -15,11 +15,7 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Login.vue')
   },
-  {
-    path: '/pot',
-    name: 'Pot',
-    component: () => import('../views/Pot.vue')
-  },
+
   {
     path: '/check',
     name: 'Check',

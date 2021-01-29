@@ -12,6 +12,13 @@ import imgUrl from '../public/config/imgFormat/imgUrl' //控制图片URL
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+
+
+Vue.use(ElementUI);
+
 Vue.use(VueCookies)
 NutUI.install(Vue);
 Vue.config.productionTip = false
