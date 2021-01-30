@@ -13,9 +13,7 @@
 				</div>
 			</div>
 			<div style="display: flex">
-				<div style="margin: 0 10px">
-					<nut-button type="light" @click="cancelMethod()">{{lang==='en'? "Cancel":"取消"}}</nut-button>
-				</div>
+			
 				<div style="margin: 0 10px">
 					<nut-button @click="loginMethod()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
 				</div>
@@ -42,36 +40,36 @@ export default {
 			}
 		}
     },
-    data(){
-        return{
-            test: true,
-            staffInfo: {}
-        }
-    },
-    methods:{
-        async loginMethod(){
-            if(!this.staffInfo.userName || !this.staffInfo.password){
-                this.$toast.fail('请输入用户名密码')
-                return
-            }
-            let checkInfo = await this.$axios.post(this.$sysConfig.server + '/user/check',{
-                userName: this.staffInfo.userName,
-                password: this.staffInfo.password
-            })
-            console.log(checkInfo)
-            if(checkInfo.data.code === 200){
-                this.$store.dispatch('setStaffInfo', {userName: this.staffInfo.userName})
-                this.$store.dispatch('setStaffLoginBox', false)
-                this.$router.push('/check')
-            }else if(checkInfo.data.code === 404 || checkInfo.data.code === 405){
-                this.$toast.fail('用户名或密码错误')
-            }else{
-                this.$toast.fail('验证时发生错误')
-            }
-        },
-        cancelMethod(){
-            this.$store.dispatch('setStaffLoginBox', false)
-        }
-    }
+    // data(){
+    //     return{
+    //         test: true,
+    //         staffInfo: {}
+    //     }
+    // },
+    // methods:{
+    //     async loginMethod(){
+    //         if(!this.staffInfo.userName || !this.staffInfo.password){
+    //             this.$toast.fail('请输入用户名密码')
+    //             return
+    //         }
+    //         let checkInfo = await this.$axios.post(this.$sysConfig.server + '/user/check',{
+    //             userName: this.staffInfo.userName,
+    //             password: this.staffInfo.password
+    //         })
+    //         console.log(checkInfo)
+    //         if(checkInfo.data.code === 200){
+    //             this.$store.dispatch('setStaffInfo', {userName: this.staffInfo.userName})
+    //             this.$store.dispatch('setStaffLoginBox', false)
+    //             this.$router.push('/check')
+    //         }else if(checkInfo.data.code === 404 || checkInfo.data.code === 405){
+    //             this.$toast.fail('用户名或密码错误')
+    //         }else{
+    //             this.$toast.fail('验证时发生错误')
+    //         }
+    //     },
+    //     cancelMethod(){
+    //         this.$store.dispatch('setStaffLoginBox', false)
+    //     }
+    // }
 }
 </script>

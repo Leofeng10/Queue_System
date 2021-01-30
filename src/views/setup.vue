@@ -21,11 +21,7 @@
                 @click="logOutMethod()"
             >
                 <span style="color: white; padding: 20px 0px 20px 60px; font-size: 20px; ">{{lang === 'ch' ? '退出' : 'Log out'}}</span>
-                <img
-                src="../../public/img/pic/logoutImage.svg"
-                alt=""
-                style="width:30px;height:30px"
-                />
+               
             </div>
         </div>
       
@@ -78,9 +74,9 @@
                             <div class="setup_body_right_content_right">
                                
                                 <button v-if="lang==='ch'" class="changeLangButton1" @click="changeLanguageMethod()">{{lang === 'en' ? 'Chinese' : '中文'}}</button>
-                                <button v-else class="changeLangButton" @click="changeLanguageMethod()">{{lang === 'en' ? 'Chinese' : '中文'}}</button>
+                                <button v-else class="changeLangButton" @click="changeLanguageMethod()">{{lang === 'en' ? '中文' : 'Chinese'}}</button>
                                 <span style="width:20px"></span>
-                                <button v-if="lang==='en'" class="changeLangButton1" @click="changeLanguageMethod()">{{lang === 'en' ? '英文' : 'English'}}</button>
+                                <button v-if="lang==='en'" class="changeLangButton1" @click="changeLanguageMethod()">{{lang === 'en' ? 'English' : '英文'}}</button>
                                 <button v-else class="changeLangButton" @click="changeLanguageMethod()">{{lang === 'en' ? '英文' : 'English'}}</button>
                                
                             </div>
@@ -201,13 +197,18 @@ export default {
     mounted(){
         this.getTable();
     },
+    computed: {
+        lang() {
+        return this.$store.state.language;
+        },
+    },
     data(){
         return{
             tableTypebox:false,
             activeName:'first',
             capacity: 0,
             radio: '1',
-            lang: 'ch',
+            
             radio1:'Add Table',
             dialogVisible:false,
             deletebox:false,
