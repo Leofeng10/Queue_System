@@ -28,14 +28,25 @@
             :visible.sync="popupVisible"
             width="500px"
         >
-        <div class="popupline">
+        <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Gender:' : '性别：' }}</div>
             <el-radio v-model="newCustomer.gender" label=true>{{ lang === 'en' ? 'Male' : '男'}}</el-radio>
             <el-radio v-model="newCustomer.gender" label=false>{{ lang === 'en' ? 'Female' : '女'}}</el-radio>
         </div>
-        <div class="popupline">
+        <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Name:' : '姓名：' }}</div>
-            <el-input placeholder="请输入内容"></el-input>
+            <el-input v-model="newCustomer.name" class="popupInput"></el-input>
+        </div>
+        <div class="popupLine">
+            <div style="margin-right: 20px;">{{ lang === 'en' ? 'Phone:' : '手机号：' }}</div>
+            <el-input v-model="newCustomer.tel" class="popupInput"></el-input>
+        </div>
+        <div class="popupLine">
+            <div style="margin-right: 20px;">{{ lang === 'en' ? 'Table size:' : '用餐人数：' }}</div>
+            <el-radio v-model="newCustomer.size" label=2>1-2</el-radio>
+            <el-radio v-model="newCustomer.size" label=4>3-4</el-radio>
+            <el-radio v-model="newCustomer.size" label=8>5-8</el-radio>
+            <el-radio v-model="newCustomer.size" label=10>>8</el-radio>
         </div>
         <div slot="footer">
             <el-button @click="popupVisible = false">取 消</el-button>
@@ -204,7 +215,12 @@ export default {
     bottom: 0;
     background-color: #e2e2e2;
 }
-.popupline {
+.popupLine {
     display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.popupInput {
+    width: 300px;
 }
 </style>
