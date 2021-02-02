@@ -1,7 +1,7 @@
 <template>
     <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%">
         <div style="width: 100%;">
-            <div class="title">Queuing list</div>
+            <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
             <div v-for="item in qArray" v-bind:key="item.index">
                 <div class="info">
@@ -183,7 +183,7 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Ropa+Sans:ital@1&display=swap');
-.title {
+.heading {
     font-weight: bold;
     font-size: 26px;
     margin: 10px 0 10px 10px;
