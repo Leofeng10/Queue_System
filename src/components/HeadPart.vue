@@ -8,13 +8,20 @@
 		<div class="headpart_center">
 			{{nowTime}}
 		</div>
+		<!-- <div>
+			<div style="color:white; " class="headpart_right">
+				{{lang === 'en' ? 'Staff Login': '员工登录'}}
+			</div>
+		</div> -->
 
 		<div class="headpart_right">
 			
-			<div @click="openSettingMethod()">
+			<!-- <div @click="openSettingMethod()">
 				<img src="../../public/img/pic/setting_icon.svg" alt="" style="width:30px;height:30px">
+			</div> -->
+			<div style="color:white; font-size:20px;" @click="staffLoginmethod()">
+				{{lang === 'en' ? 'Staff Login': '员工登录'}}
 			</div>
-			
 		</div>
 
 
@@ -45,6 +52,37 @@
       		</div>
 			</div>
 		</nut-popup>
+		<!-- <el-dislog
+		 	title='Add Table Type'
+            :visible.sync="staffLoginBox"
+            width="30%">
+			<div style="font-size: 18px; margin-top:20px">
+				{{ lang === "en" ? "Staff Log In" : "请使用员工账号登录" }}
+			</div>
+			<div style="padding: 18px;">
+				<div style="padding-bottom: 10px">
+				<cube-input
+					v-model="staffInfo.userName"
+					placeholder="STAFF NAME"
+				></cube-input>
+				</div>
+				<div style="padding-bottom: 10px">
+				<cube-input
+					type="password"
+					v-model="staffInfo.password"
+					placeholder="PASSWORD"
+					:eye="{ visible: false, blurHidden: true }"
+				></cube-input>
+				</div>
+			</div>
+			<div style="display: flex;justify-content:center">
+				<div style="margin: 0 10px">
+				<nut-button @click="loginMethod()">{{
+					lang === "en" ? "Confirm" : "确认"
+				}}</nut-button>
+				</div>
+			</div>
+		</el-dislog> -->
 	</div>
 
 	
@@ -62,7 +100,9 @@ export default {
 	data(){
 		return {
 			nowTime:'',
-			isShowConfirmBox:false
+			isShowConfirmBox:false,
+			staffLoginBox:false,
+			staffInfo: {},
 		}
 	},
 
@@ -91,6 +131,33 @@ export default {
 		}
 	},
 	methods:{
+		async loginMethod() {
+			if (!this.staffInfo.userName || !this.staffInfo.password) {
+				this.$toast.fail("请输入用户名密码");
+				return;
+			}
+			let checkInfo = await this.$axios.post(
+				this.$sysConfig.server + "/user/check",
+				{
+				userName: this.staffInfo.userName,
+				password: this.staffInfo.password,
+				}
+			);
+			console.log(checkInfo);
+			if (checkInfo.data.code === 200) {
+				this.staffLoginBox = false;
+				// this.$router.push("/setup");
+				// this.openTablePopup()
+			} else if (checkInfo.data.code === 404 || checkInfo.data.code === 405) {
+				this.$toast.fail("用户名或密码错误");
+			} else {
+				this.$toast.fail("验证时发生错误");
+			}
+		},
+		staffLoginmethod(){
+			this.staffLoginBox = true
+			// this.$router.push('/staffLogin')
+		},
 		openSettingMethod(){
 			this.$router.push('/setup')
 		},
@@ -110,15 +177,7 @@ export default {
 		logoOut(){
 			this.$store.dispatch('setStaffLoginBox', true)
 		},
-		changeLanguageMethod(){
-            if(this.lang === 'en'){
-                this.$store.dispatch('setLanguage', 'ch')
-                localStorage.setItem('language','ch')
-            }else{
-                this.$store.dispatch('setLanguage', 'en')
-                localStorage.setItem('language','en')
-            }
-		},
+
 		timeFormate(timeStamp) {
 			let year = new Date(timeStamp).getFullYear();
 			let month =new Date(timeStamp).getMonth() + 1 < 10? "0" + (new Date(timeStamp).getMonth() + 1): new Date(timeStamp).getMonth() + 1;

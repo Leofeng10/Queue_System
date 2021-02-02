@@ -4,11 +4,7 @@
     <div id="headpart">
       <div class="headpart_left">
         <div @click="logOutMethod()">
-          <img
-            src="../../public/img/pic/logoutImage.svg"
-            alt=""
-            style="width: 30px; height: 30px"
-          />
+          {{lang=== "ch" ? "返回": 'Back'}}
         </div>
       </div>
       <div class="headpart_center">
@@ -25,20 +21,23 @@
       </div>
       <nut-popup
         v-model="isShowConfirmBox"
-        style="color: #666; width: 30%; height: 350px; border-radius: 30px"
+        style="color: #666; width: 30%; height: 300px; border-radius: 30px;"
         :z-index="11"
       >
-        <div style="background-color: #202a39; height: 15%"></div>
+        <div style="background-color: #202a39; height: 20%; color:white; display:flex; align-items:center; font-size:20px;">
+          <span style="margin-left:5%;">{{lang==='ch' ? '提示': 'Notification'}}</span>
+        </div>
         <div
           style="
+            margin:10%;
             display: flex;
             justify-content: center;
-            height: 60%;
+            height: 30%;
             align-items: center;
             font-size: 30px;
           "
         >
-          {{ lang === "en" ? "Confirm to log out" : "确认退出" }}
+          {{ lang === "en" ? "Confirm to go back to client interface" : "确认返回至客户页面" }}
         </div>
         <div>
           <div style="display: flex; justify-content: space-around">
@@ -109,7 +108,6 @@
 
 <script>
 import Qlist from './Qlist.vue';
-
 export default {
   components: { Qlist },
   computed: {
@@ -140,6 +138,7 @@ export default {
   },
   data() {
     return {
+      
       nowTime: "",
       isShowConfirmBox: false,
       maxCap: 10,
@@ -240,14 +239,13 @@ export default {
       this.$router.push("/setup");
     },
     confiormMethods() {
-      this.$router.push("/login");
+      this.$router.push("/client");
     },
     logOutMethod() {
       this.isShowConfirmBox = true;
     },
-
     trunBack() {
-      this.$router.push("/login");
+      this.$router.push("/client");
     },
     openLoginBox() {
       this.$store.dispatch("setLoginBox", true);
@@ -327,6 +325,8 @@ export default {
 .headpart_left {
   align-items: center;
   padding: 20px;
+  color: white;
+  font-size: 20px;
 }
 .headpart_center {
   color: white;
@@ -388,6 +388,7 @@ export default {
   border-radius: 20px;
   height: 80px;
   width: 120px;
+  
 }
 .table img {
   width: 25px;

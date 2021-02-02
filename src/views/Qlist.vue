@@ -53,23 +53,6 @@
             <el-button type="primary" @click="popupVisible = false">确 定</el-button>
         </div>
         </el-dialog>
-        <!-- group box start -->
-                <el-dialog class="s" :title="lang === 'ch'?'打印群组':'Print Group'" style="height:600px" :visible.sync="isShowGroupBox" width="448px">
-                    <el-table :data="groupArray" style="width:100%" height="300">
-                        <el-table-column prop="name" label="Group Name" width="180px"></el-table-column>
-                        <el-table-column label="Actions">
-                            <div slot-scope="scope">
-                                <el-button icon="el-icon-edit" @click="showEditGroupBox(scope.row)" circle></el-button>
-                                <el-button icon="el-icon-delete" @click="showDeleteGroupBox(scope.row)" circle></el-button>
-                            </div>
-                        </el-table-column>
-                    </el-table>
-                    <br>
-                    <div style="padding-bottom:10px;text-align:right">
-                        <el-button type="primary" @click="showNewGroupBox()"><i class="el-icon-plus"></i> 新增</el-button>
-                    </div>
-                </el-dialog>
-        <!-- group box end -->
     </div>
 </template>
 
