@@ -14,7 +14,7 @@
                             <div>{{ item.size }}</div>
                             <img src="../../public/img/icons/person_dark.svg" alt="people"/>
                             <!-- //TODO: add @click -->
-                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;"/>
+                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>
                         </div>
                     </div>
                     <div style="padding: 10px 0 0 120px;">{{ item.tel }}</div>
@@ -54,14 +54,18 @@
         </div>
         <div slot="footer">
             <el-button @click="popupVisible = false">取 消</el-button>
-            <el-button type="primary" @click="popupVisible = false">确 定</el-button>
+            <el-button type="primary" @click="addQueueMethod()">确 定</el-button>
         </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+    mounted(){
+        this.getQueueArray();
+    },
     computed: {
         lang() {
             return this.$store.state.language;
@@ -69,93 +73,7 @@ export default {
     },
     data() {
         return {
-            qArray: [
-                {
-                    // index: 0,
-                    name: "Tay",
-                    gender: true, // Male is true, Female is false
-                    tel: null,
-                    size: 0 // Number of people
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "8888 8888",
-                    size: 2
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "6666 6666",
-                    size: 4
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-            ],
+            qArray: [],
             newCustomer: {
                 name: null,
                 gender: false,
@@ -163,6 +81,55 @@ export default {
                 size: 0,
             },
             popupVisible: false
+        }
+    },
+    methods:{
+        getQueueArray(){
+           axios.get(this.$sysConfig.server + '/queue/getQueue').then(doc => {
+               console.log(doc)
+                if(doc.data.code === 0){
+                    this.qArray = doc.data.doc
+                   console.log("array success")
+                }else if(doc.data.code === 2){
+              
+                    console.log("failed")
+                }else{
+                   
+                }
+           })
+        },
+        async addQueueMethod(){
+            await axios.post(this.$sysConfig.server + "/queue/createQueue",{
+                gender:this.newCustomer.gender,
+                name:this.newCustomer.name,
+                phoneNumber:this.newCustomer.tel,
+                size:this.newCustomer.size
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{ 
+                }
+            })
+            this.getQueueArray();
+            this.popupVisible = false
+        },
+        async deleteQueueMethods(item){
+            await axios.post(this.$sysConfig.server + '/queue/deleteQueue',{
+                id:item._id,
+            }).then(doc => {
+                if(doc.data.code === 200){
+                   console.log("delete success")
+                }else if(doc.data.code === 1){
+                    console.log("delete failed")
+                }else{
+                   
+                }
+            });
+            this.getQueueArray();
         }
     }
 }

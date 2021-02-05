@@ -152,11 +152,11 @@
                         
                     <div style="padding-bottom: 30px; display:flex;  font-size:20px; font-weight:600; ">
                         <span style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "姓氏 : ": "Last Name : "}}</span>
-                        <cube-input v-model="LastName" placeholder="Last Name" style="border:solid black 1px; border-radius:10px;"></cube-input>
+                        <cube-input v-model="newCustomer.name" placeholder="Last Name" style="border:solid black 1px; border-radius:10px;"></cube-input>
                     </div>
                     <div style="padding-bottom: 10px; display:flex;  font-size:20px; font-weight:600;" >
                         <span  style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "电话 : ": "Phone Number : "}}</span>
-                        <cube-input v-model="phoneNumber" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px;"></cube-input>
+                        <cube-input v-model="newCustomer.tel" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px;"></cube-input>
                     </div>
 		
 			    </div>
@@ -170,18 +170,45 @@
 					<nut-button type="light" @click="isShowInputInfoBox=false">{{lang==='en'? "Cancel":"取消"}}</nut-button>
 				</div>
 				<div style="margin: 0 10px">
-					<nut-button @click="loginMethod()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
+					<nut-button @click="startQ()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
 				</div>
 			</div>
         </div>
     </nut-popup>
+
+     <!-- start table bill start -->
+        <div style="display: none">
+            <div id="qrcode_bill">
+                <div style="display: flex;flex-direction: column;align-items: center;">
+                    <div style="display:flex;width:300px;padding-left:30px">
+                    </div>
+                    <div style="font-size: 20px;height: 40px;line-height: 40px;">
+                        <span>{{restaurantName}}</span>
+                    </div>
+                    <div style="padding: 10px 0">
+                        <span>{{lang === 'en'? 'Scan QRcode to start': '扫描二维码开始点餐'}}</span>
+                    </div>
+                    <!-- <div style="padding: 10px 0">
+                        <img id="imgSrc">
+                    </div> -->
+                    <div style="padding: 10px 0 20px 0">
+                        <span>{{QRMessage}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- start table bill end -->
 </div>
 </template>
 
 <script>
+import qrcode from 'qrcode'
+import getLodop from "../../public/js/lodop";
 
 export default{
-    
+    mounted() {
+        this.printerList = JSON.parse(localStorage.getItem("printerList"))
+    },
     data() {
         return {
             nowTime: "",
@@ -190,9 +217,18 @@ export default{
             staffInfo: {},
             isShowInputInfoBox:false,
             tableSeat:0,
-            phoneNumber:null,
-            LastName:null,
+            newCustomer: {
+                name: null,
+                gender: false,
+                tel: null,
+                size: 0,
+            },
             radio:null,
+            printerWithPrintQrCode: [],
+            printerList: null,
+            selectedPrinter: null,
+            isShowSelectPrinterForQrCode: false,
+            whichTable: null
         }
     },
     computed: {
@@ -217,12 +253,19 @@ export default{
         }
         return tempFlag;
         },
+        restaurantName(){
+            let name = null
+            if(localStorage.getItem('restaurantName')) name = localStorage.getItem('restaurantName') 
+            return name
+        },
+        QRMessage(){
+            return localStorage.getItem('QRmessage')
+        }
     },
     mounted() {
         this.nowTimes();
     },
     methods:{
-        
         openSettingMethod() {
             this.$router.push("/setup");
         },
@@ -314,7 +357,132 @@ export default{
  
             }
             console.log(this.tableSeat)
-        }
+        },
+        startQ() {
+            this.addQueueMethod();
+            this.openSelectPrinterForQrCode();
+        },
+        async addQueueMethod(){
+            await axios.post(this.$sysConfig.server + "/queue/createQueue",{
+                gender:this.newCustomer.gender,
+                name:this.newCustomer.name,
+                phoneNumber:this.newCustomer.tel,
+                size:this.newCustomer.size
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{ 
+                }
+            })
+            this.getQueueArray();
+            this.popupVisible = false
+        },
+        async getQueueId() {
+            await axios.post(this.$sysConfig.server + "/queue/getQueue", {
+
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                   this.tempId = doc._id
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{ 
+                }
+            })
+        },
+        openSelectPrinterForQrCode(){
+            this.printerWithPrintQrCode = []
+            this.printerList.forEach(printerInfo =>{
+                if(printerInfo.isPrintQRcode){
+                    this.printerWithPrintQrCode.push(printerInfo)
+                }
+            })
+            if(this.printerWithPrintQrCode.length>1){
+                this.isShowSelectPrinterForQrCode = true
+            }
+            else{
+                this.selectedPrinter = this.printerWithPrintQrCode[0]
+                this.printQrCodeMethod(this.selectedPrinter)
+            }
+        },
+        printQrCodeMethod(item){
+            console.log(item)
+            let LODOP = getLodop()
+            let options ={
+                margin:0,
+                version:4
+            }
+            qrcode.toDataURL(this.$sysConfig.client + "/?id="+ this.tempId,options)
+            .then(url => {
+                // document.getElementById("imgSrc").src = url;
+                if (LODOP) {
+                    let hasPrint = false
+                        if(item.isPrintQRcode){
+                            hasPrint = true
+                            let strFormHtml ='<body>' + document.getElementById('qrcode_bill').innerHTML + '</body>'   //获取打印内容
+                            LODOP.PRINT_INIT('QRcode' + new Date())  //初始化
+                            LODOP.SET_PRINT_STYLE("FontName","隶书")
+                            LODOP.SET_PRINT_STYLE("FontSize",11)
+                            LODOP.SET_PRINT_PAGESIZE(3, 800, 0)  //设置横向 1 纵向 2 横向 3高度自适应
+                            LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', strFormHtml)    //设置打印内容 
+                            LODOP.SET_PREVIEW_WINDOW(2, 0, 0, 800, 600, '')  //设置预览窗口模式和大小
+                            // LODOP.PREVIEW()//打印前预览
+                            LODOP.SET_PRINTER_INDEXA(item.printerName)
+                            LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS",true);
+                            async function getJobCodeMethod(){
+                                return new Promise(async resolve =>{
+                                    LODOP.On_Return=function(TaskID,Value){
+                                        resolve(Value)
+                                    }
+                                })
+                            }
+                            getJobCodeMethod()
+                            .then(async tempJobCode =>{
+                                let a = await this.checkPrintError(tempJobCode,strFormHtml,item.printerName)
+                            })
+                            LODOP.PRINT()//直接打印
+                        }
+                    if(!hasPrint){
+                        LODOP.PRINT_INIT('QRcode'+ new Date())  //初始化
+                        LODOP.SET_PRINT_STYLE("FontName","隶书")
+                        LODOP.SET_PRINT_STYLE("FontSize",11)
+                        LODOP.SET_PRINT_PAGESIZE(3, 800, 0)  //设置横向 1 纵向 2 横向 3高度自适应
+                        LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', strFormHtml)    //设置打印内容 
+                        LODOP.SET_PREVIEW_WINDOW(2, 0, 0, 800, 600, '')  //设置预览窗口模式和大小
+                        // LODOP.PREVIEW()//打印前预览
+                        LODOP.SET_PRINTER_INDEXA(-1)
+                        LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS",true);
+                        async function getJobCodeMethod(){
+                            return new Promise(async resolve =>{
+                                LODOP.On_Return=function(TaskID,Value){
+                                    resolve(Value)
+                                }
+                            })
+                        }
+                        getJobCodeMethod()
+                        .then(async tempJobCode =>{
+                            let a = await this.checkPrintError(tempJobCode,strFormHtml,item.printerName)
+                        })
+                        LODOP.PRINT()//直接打印
+                    }
+                }else{
+                    this.$notify({
+                        title: '提示',
+                        message: '未找到打印机服务器，请确认连接地址正确或打印机服务是否正常'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
+            this.isShowSelectPrinterForQrCode = false
+          }
     }
     
 }

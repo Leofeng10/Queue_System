@@ -11,7 +11,8 @@ document.addEventListener('dblclick', function (e) {
 		
 export default {
 	mounted(){
-		this.appInitMethod()
+		this.appInitMethod();
+		this.getPrinterFromServerMethod()
 	},
 	computed:{
 		lang(){
@@ -74,7 +75,24 @@ export default {
 				this.toastLoading.hide();
 				resolve(true)
 			})	
-		}
+		},
+		getPrinterFromServerMethod(){
+            let printArray = localStorage.getItem('printerList')
+            if(printArray){
+                this.printArray_server = JSON.parse(printArray)
+            }
+		},
+		savePrinterListToLocalMethod(){
+            let tempPrinterList = []
+            this.printArray_server.forEach(printerInfo =>{
+                if(printerInfo.printerActive){
+                    tempPrinterList.push(printerInfo)
+                }
+            })
+            if(tempPrinterList.length !=0){
+                localStorage.setItem("printerList", JSON.stringify(tempPrinterList))
+            }
+        },
 	}
 }
 </script>
