@@ -1,5 +1,5 @@
 <template>
-    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%">
+    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%;">
         <div style="width: 100%;">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
@@ -34,8 +34,11 @@
         >
         <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Gender:' : '性别：' }}</div>
-            <el-radio v-model="newCustomer.gender" label=true>{{ lang === 'en' ? 'Male' : '男'}}</el-radio>
-            <el-radio v-model="newCustomer.gender" label=false>{{ lang === 'en' ? 'Female' : '女'}}</el-radio>
+
+            <el-radio v-model="newCustomer.gender" label="Mrs." border size="small">Mrs.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Mr." border size="small">Mr.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Ms." border size="small">Ms.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Miss." border size="small">Miss.</el-radio>
         </div>
         <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Name:' : '姓名：' }}</div>
@@ -57,6 +60,7 @@
             <el-button type="primary" @click="addQueueMethod()">确 定</el-button>
         </div>
         </el-dialog>
+        
     </div>
 </template>
 
@@ -80,7 +84,8 @@ export default {
                 tel: null,
                 size: 0,
             },
-            popupVisible: false
+            popupVisible: false,
+         
         }
     },
     methods:{
@@ -99,6 +104,9 @@ export default {
            })
         },
         async addQueueMethod(){
+            console.log(this.radio)
+            console.log(this.LastName)
+            console.log(this.phoneNumber)
             await axios.post(this.$sysConfig.server + "/queue/createQueue",{
                 gender:this.newCustomer.gender,
                 name:this.newCustomer.name,
@@ -111,7 +119,8 @@ export default {
                 }else if(doc.data.code === 400){
                     this.getTable();
                     console.log("failed")
-                }else{ 
+                }else{
+                   
                 }
             })
             this.getQueueArray();
@@ -131,6 +140,7 @@ export default {
             });
             this.getQueueArray();
         }
+
     }
 }
 
@@ -143,6 +153,8 @@ export default {
     margin: 10px 0 10px 10px;
     font-family: 'Ropa Sans', sans-serif;
     color: #ff7f50;
+    max-height: 500px;
+
 }
 .info {
     margin: 20px 0 0 30px;
@@ -162,7 +174,6 @@ export default {
     border: none;
     margin: 20px 0 10px 70px;
 }
-
 #add {
     width: 100%;
     position: fixed;

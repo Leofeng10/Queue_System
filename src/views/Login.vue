@@ -11,7 +11,7 @@
 			</div>
 			<div class="login_center_body">
 				<div class="login_center_body_top">
-					<img :src="Image | imgurl" alt="获取失败">
+					<img src="../../public/img/icons/apple-touch-icon-60x60.png" alt="获取失败">
 				</div>
 				<div style=" color: #666; background-color:white; border-radius:10px;" class="home_success" :close-on-click-overlay="false" :z-index="11" get-container="#home">
 				
