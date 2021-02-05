@@ -1,5 +1,5 @@
 <template>
-    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%">
+    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%;">
         <div style="width: 100%;">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
@@ -148,6 +148,8 @@ export default {
     margin: 10px 0 10px 10px;
     font-family: 'Ropa Sans', sans-serif;
     color: #ff7f50;
+    max-height: 500px;
+
 }
 .info {
     margin: 20px 0 0 30px;
