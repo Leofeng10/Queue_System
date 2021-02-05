@@ -9,6 +9,7 @@
             alt=""
             style="width: 30px; height: 30px"
           />
+         
         </div>
       </div>
       <div class="headpart_center">
@@ -25,13 +26,14 @@
       </div>
       
     </div>
-
+ <div style="height:64px;"></div>
     <!-- Body starts -->
     <div id="body">
       
       <!-- Left part -->
       <div style="width: 70%;position:fixed;">
-        <div style="height:64px;"></div>
+       
+
         <!-- Navbar -->
         <div class="navbar">
           <div
@@ -67,7 +69,7 @@
       </div>
       <!-- right part -->
       <div style="margin-left:70%">
-        <div style="height:64px;"></div>
+       
         <Qlist/>
       </div>
       
@@ -350,7 +352,7 @@ export default {
 }
 .headpart_left {
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 }
 .headpart_center {
   color: white;
