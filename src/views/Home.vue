@@ -4,7 +4,12 @@
     <div id="headpart">
       <div class="headpart_left">
         <div @click="logOutMethod()">
-          {{lang=== "ch" ? "返回": 'Back'}}
+          <img
+            src="../../public/img/pic/logoutImage.svg"
+            alt=""
+            style="width: 30px; height: 30px"
+          />
+         
         </div>
       </div>
       <div class="headpart_center">
@@ -19,25 +24,74 @@
           />
         </div>
       </div>
-      <nut-popup
+      
+    </div>
+ <div style="height:64px;"></div>
+    <!-- Body starts -->
+    <div id="body">
+      
+      <!-- Left part -->
+      <div style="width: 70%;position:fixed;">
+       
+
+        <!-- Navbar -->
+        <div class="navbar">
+          <div
+            v-for="(item, index) in capacityArray"
+            v-bind:key="index"
+            class="capacity"
+          >
+            <div @click="changePage(item)" :class="item.choosed ? 'choosed' : ''">{{ item.name }}</div>
+          </div>
+        </div>
+
+        <!-- Tables -->
+        <div class="container">
+          <div
+            v-for="(item, index) in tableArray" 
+            v-bind:key="index"
+            v-if="item.tableSeat <= maxCap && item.tableSeat > minCap"
+            class="table"
+            :class="item.tableSeat <= 2
+                      ? (item.status ? 'table1' : 'table1_2')
+                      : item.tableSeat <= 4 ? (item.status ? 'table2' : 'table2_2')
+                                      : item.tableSeat <= 8 ? (item.status ? 'table3' : 'table3_2')
+                                                      : item.status ? 'table4' : 'table4_2'"
+          >
+            <div style="height: 20px; width: 100%;"></div>
+            <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
+            <div style="display: flex; width: 100%; justify-content: flex-end;">
+              <div style="position: relative;">{{ item.tableSeat }}</div>
+              <img src="../../public/img/icons/person.svg" alt="people">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- right part -->
+      <div style="margin-left:70%">
+       
+        <Qlist/>
+      </div>
+      
+      <div>
+      </div>
+    </div>
+    <nut-popup
         v-model="isShowConfirmBox"
-        style="color: #666; width: 30%; height: 300px; border-radius: 30px;"
+        style="color: #666; width: 30%; height: 250px; border-radius: 30px"
         :z-index="11"
       >
-        <div style="background-color: #202a39; height: 20%; color:white; display:flex; align-items:center; font-size:20px;">
-          <span style="margin-left:5%;">{{lang==='ch' ? '提示': 'Notification'}}</span>
-        </div>
+        <div style="background-color: #202a39; height: 15%"></div>
         <div
           style="
-            margin:10%;
             display: flex;
             justify-content: center;
-            height: 30%;
+            height: 60%;
             align-items: center;
             font-size: 30px;
           "
         >
-          {{ lang === "en" ? "Confirm to go back to client interface" : "确认返回至客户页面" }}
+          {{ lang === "en" ? "Confirm to log out" : "确认退出" }}
         </div>
         <div>
           <div style="display: flex; justify-content: space-around">
@@ -59,55 +113,12 @@
           </div>
         </div>
       </nut-popup>
-    </div>
-
-    <!-- Body starts -->
-    <div id="body">
-      <!-- Left part -->
-      <div style="width: 70%">
-        <!-- Navbar -->
-        <div class="navbar">
-          <div
-            v-for="(item, index) in capacityArray"
-            v-bind:key="index"
-            class="capacity"
-          >
-            <div @click="changePage(item)" :class="item.choosed ? 'choosed' : ''">{{ item.name }}</div>
-          </div>
-        </div>
-
-        <!-- Tables -->
-        <div class="container">
-          <div
-            v-for="(item, index) in tableArray" 
-            v-bind:key="index"
-            v-if="item.capacity <= maxCap && item.capacity > minCap"
-            class="table"
-            :class="item.capacity <= 2
-                      ? (item.status ? 'table1' : 'table1_2')
-                      : item.capacity <= 4 ? (item.status ? 'table2' : 'table2_2')
-                                      : item.capacity <= 8 ? (item.status ? 'table3' : 'table3_2')
-                                                      : item.status ? 'table4' : 'table4_2'"
-          >
-            <div style="height: 20px; width: 100%;"></div>
-            <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
-            <div style="display: flex; width: 100%; justify-content: flex-end;">
-              <div style="position: relative;">{{ item.capacity }}</div>
-              <img src="../../public/img/icons/person.svg" alt="people">
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- right part -->
-      <Qlist/>
-      <div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Qlist from './Qlist.vue';
+import axios from 'axios';
 export default {
   components: { Qlist },
   computed: {
@@ -135,10 +146,10 @@ export default {
   },
   mounted() {
     this.nowTimes();
+    this.getTable();
   },
   data() {
     return {
-      
       nowTime: "",
       isShowConfirmBox: false,
       maxCap: 10,
@@ -175,63 +186,66 @@ export default {
           choosed: false,
         },
       ],
+      //模拟餐桌
       tableArray: [
         {
           num: 1,
-          capacity: 4,
+          tableSeat: 4,
           status: true // true means occupied
         },
         {
           num: 2,
-          capacity: 2,
+          tableSeat: 2,
           status: true
         },
         {
           num: 3,
-          capacity: 6,
+          tableSeat: 6,
           status: true
         },
         {
           num: 4,
-          capacity: 4,
+          tableSeat: 4,
           status: true
         },
         {
           num: 5,
-          capacity: 4,
+          tableSeat: 4,
           status: true
         },
         {
           num: 6,
-          capacity: 2,
+          tableSeat: 2,
           status: true
         },
         {
           num: 7,
-          capacity: 4,
+          tableSeat: 4,
           status: false
         },
         {
           num: 8,
-          capacity: 8,
+          tableSeat: 8,
           status: true
         },
         {
           num: 9,
-          capacity: 2,
+          tableSeat: 2,
           status: true
         },
         {
           num: 10,
-          capacity: 4,
+          tableSeat: 4,
           status: true
         },
         {
           num: 11,
-          capacity: 6,
+          tableSeat: 6,
           status: false
         },
-      ]
+      ],
+      //实际餐桌
+      tableList:[]
     };
   },
   methods: {
@@ -242,10 +256,11 @@ export default {
       this.$router.push("/client");
     },
     logOutMethod() {
+      console.log("weqrfqwefeqrf")
       this.isShowConfirmBox = true;
     },
     trunBack() {
-      this.$router.push("/client");
+      this.$router.push("/login");
     },
     openLoginBox() {
       this.$store.dispatch("setLoginBox", true);
@@ -308,7 +323,19 @@ export default {
         this.minCap = this.capacityArray[item.index - 1].num;
         this.maxCap = item.num;
       }
-    }
+    },
+
+    //将tableList改成tableArray即可显示实际餐桌
+    getTable(){
+           axios.get(this.$sysConfig.server + "/table").then(doc=>{
+                if(doc.data.code==0){
+                    this.tableList = doc.data.doc
+                    console.log(doc.data.doc);
+                }else{
+
+                }
+            })
+        },
   },
 };
 </script>
@@ -321,12 +348,11 @@ export default {
   height: 64px;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
 }
 .headpart_left {
   align-items: center;
-  padding: 20px;
-  color: white;
-  font-size: 20px;
+  padding: 10px;
 }
 .headpart_center {
   color: white;
@@ -388,7 +414,6 @@ export default {
   border-radius: 20px;
   height: 80px;
   width: 120px;
-  
 }
 .table img {
   width: 25px;

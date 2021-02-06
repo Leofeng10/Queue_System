@@ -1,23 +1,19 @@
 <template>
-    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%">
+    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%;">
         <div style="width: 100%;">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
             <div v-for="item in qArray" v-bind:key="item.index">
                 <div class="info">
-                    <div style="display: flex; justify-content: center;">
-                        <div style="width: 70%; display: flex">
-                            <div style="font-weight: bold;">{{ item.gender ? 'Mr.' : 'Ms.' }}</div>
-                            <div style="font-weight: bold;">{{ item.name }}</div>
-                        </div>
-                        <div style="width: 30%; display: flex">
-                            <div>{{ item.size }}</div>
-                            <img src="../../public/img/icons/person_dark.svg" alt="people"/>
-                            <!-- //TODO: add @click -->
-                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;"/>
-                        </div>
+                    <div style="display: flex;">
+                        <div style="font-weight: bold;">{{ item.gender }}</div>
+                        <div style="font-weight: bold;">{{ item.name }}</div>
+                        <div style="margin-left: 120px;">{{ item.size }}</div>
+                        <img src="../../public/img/icons/person_dark.svg" alt="people"/>
+                         <!-- //TODO: add @click -->
+                        <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>
                     </div>
-                    <div style="padding: 10px 0 0 120px;">{{ item.tel }}</div>
+                    <div style="padding: 10px 0px 0px 0px;">{{ item.phoneNumber }}</div>
                 </div>
             </div>
             <div style="height: 70px;"></div>
@@ -34,8 +30,11 @@
         >
         <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Gender:' : '性别：' }}</div>
-            <el-radio v-model="newCustomer.gender" label=true>{{ lang === 'en' ? 'Male' : '男'}}</el-radio>
-            <el-radio v-model="newCustomer.gender" label=false>{{ lang === 'en' ? 'Female' : '女'}}</el-radio>
+
+            <el-radio v-model="newCustomer.gender" label="Mrs." border size="small">Mrs.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Mr." border size="small">Mr.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Ms." border size="small">Ms.</el-radio>
+            <el-radio v-model="newCustomer.gender" label="Miss." border size="small">Miss.</el-radio>
         </div>
         <div class="popupLine">
             <div style="margin-right: 20px;">{{ lang === 'en' ? 'Name:' : '姓名：' }}</div>
@@ -54,14 +53,19 @@
         </div>
         <div slot="footer">
             <el-button @click="popupVisible = false">取 消</el-button>
-            <el-button type="primary" @click="popupVisible = false">确 定</el-button>
+            <el-button type="primary" @click="addQueueMethod()">确 定</el-button>
         </div>
         </el-dialog>
+        
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+    mounted(){
+        this.getQueueArray();
+    },
     computed: {
         lang() {
             return this.$store.state.language;
@@ -69,101 +73,70 @@ export default {
     },
     data() {
         return {
-            qArray: [
-                {
-                    // index: 0,
-                    name: "Tay",
-                    gender: true, // Male is true, Female is false
-                    tel: null,
-                    size: 0 // Number of people
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "8888 8888",
-                    size: 2
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "6666 6666",
-                    size: 4
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-                {
-                    name: "Tay",
-                    gender: true,
-                    tel: "1111 1111",
-                    size: 6
-                },
-            ],
+            qArray: [],
             newCustomer: {
                 name: null,
                 gender: false,
                 tel: null,
                 size: 0,
             },
-            popupVisible: false
+            popupVisible: false,
+         
         }
+    },
+    methods:{
+        getQueueArray(){
+           axios.get(this.$sysConfig.server + '/queue/getQueue').then(doc => {
+               console.log(doc)
+                if(doc.data.code === 0){
+                    this.qArray = doc.data.doc
+                   console.log("array success")
+                }else if(doc.data.code === 2){
+              
+                    console.log("failed")
+                }else{
+                   
+                }
+           })
+        },
+        async addQueueMethod(){
+            console.log(this.radio)
+            console.log(this.LastName)
+            console.log(this.phoneNumber)
+            await axios.post(this.$sysConfig.server + "/queue/createQueue",{
+                gender:this.newCustomer.gender,
+                name:this.newCustomer.name,
+                phoneNumber:this.newCustomer.tel,
+                size:this.newCustomer.size
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{
+                   
+                }
+            })
+            this.getQueueArray();
+            this.popupVisible = false
+        },
+        async deleteQueueMethods(item){
+            await axios.post(this.$sysConfig.server + '/queue/deleteQueue',{
+                id:item._id,
+            }).then(doc => {
+                if(doc.data.code === 200){
+                   console.log("delete success")
+                }else if(doc.data.code === 1){
+                    console.log("delete failed")
+                }else{
+                   
+                }
+            });
+            this.getQueueArray();
+        }
+
     }
 }
 
@@ -176,6 +149,8 @@ export default {
     margin: 10px 0 10px 10px;
     font-family: 'Ropa Sans', sans-serif;
     color: #ff7f50;
+    max-height: 500px;
+
 }
 .info {
     margin: 20px 0 0 30px;
@@ -195,7 +170,6 @@ export default {
     border: none;
     margin: 20px 0 10px 70px;
 }
-
 #add {
     width: 100%;
     position: fixed;
