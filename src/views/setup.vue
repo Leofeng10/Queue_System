@@ -1,5 +1,7 @@
 <template>
-    <div id="setup">
+
+    <div>
+
         <div class="title" style="height: 64px;">
             <div
                 class=""
@@ -79,22 +81,9 @@
                                
                             </div>
                         </div>
+                  
+
                     </el-tab-pane>
-                    <!-- <el-tab-pane name="third">
-                        <div slot="label" style="display: flex; font-size:20px">
-                      
-                            {{lang === 'en'?'Printer': '打印设置'}}
-                        </div>
-                        <div class="setup_body_right_content">
-                            <div class="setup_body_right_content_left">
-                                <span>{{ lang === 'en'?'PRINTER URL':'打印服务地址'}}</span>
-                            </div>
-                            <div class="setup_body_right_content_right">
-                                <input type="text" v-model="printerAddress" placeholder="请输入ip地址">
-                                <button @click="editPrintServerMethod(printerAddress)"> {{ lang === 'en' ? 'Submit' : "提交" }} </button>
-                            </div>
-                        </div>
-                    </el-tab-pane> -->
                 </el-tabs>`
             </div>
            
@@ -203,9 +192,7 @@
 </template>
 
 <script>
-import getLodop from "../../public/js/lodop"
 import axios from 'axios';
-
 export default {
     mounted(){
         this.getTable();
@@ -245,10 +232,8 @@ export default {
             }],
             value: '',
             tableTypeList:[{name:"所有餐桌", name_en: "All", index:1, capacity:0}, {name:" 1 - 2 人桌", name_en: " 1 - 2 Persons", index:2, capacity:2},{name:"3 - 4 人桌", name_en: " 3 - 4 Persons", index:3, capacity:4},{name:" 5 - 8 人桌", name_en: " 8 Persons", index:4, capacity:8}],
-            tableList:[{index: 1, capacity:2},{index: 2, capacity:4},{index: 3, capacity:8},{index: 4, capacity:10},{index: 5, capacity:2},{index: 6, capacity:2},{index: 7, capacity:8}],
-            // printerAddress: null,
-            // printArray: [],
-            // printArray_server: []
+            tableList:[{index: 1, capacity:2},{index: 2, capacity:4},{index: 3, capacity:8},{index: 4, capacity:10},{index: 5, capacity:2},{index: 6, capacity:2},{index: 7, capacity:8}]
+          
         }
     },
     methods: {
@@ -266,7 +251,6 @@ export default {
            axios.get(this.$sysConfig.server + "/table").then(doc=>{
                 if(doc.data.code==0){
                     this.tableList = doc.data.doc
-                    console.log(doc.data.doc);
                 }else{
 
                 }
@@ -274,14 +258,12 @@ export default {
         },
         
         addTableMethod(){
-            console.log(this.tableName + "   " + this.tableSeat);
             axios.post(this.$sysConfig.server + '/table',{
                 tableName: this.tableName,
                 tableNote: this.tableNote,    
                 tableZone: null,
                 capacity:this.tableSeat
             }).then(doc => {
-                console.log(doc)
                 if(doc.data.code === 2){
                    console.log("failed")
                 }else if(doc.data.code === 0){
@@ -304,7 +286,6 @@ export default {
         },
         changeTableType(capacity){
             this.capacity = capacity;
-            console.log(capacity);
         },
         addTableTypeMethod(){
             this.tableTypeList.push({name: this.tableCapacity + '  人桌', name_en: this.tableCapacity + "  Persons",  capacity:this.tableCapacity})
@@ -336,54 +317,7 @@ export default {
                 done();
             })
             .catch(_ => {});
-        },
-        // getAllPrinterMethod() {
-        //     this.printArray = []
-        //     if (getLodop) {
-        //         let LODOP = null
-        //         let tempCount = 0
-        //         let intervalFlag = setInterval(() => {
-        //             LODOP = getLodop()
-        //             tempCount ++
-        //             // console.log('Wait loading printer: ' + (tempCount/2) + 's')
-        //             if(LODOP != false){
-        //                 clearInterval(intervalFlag)
-        //                 let printerNum = LODOP.GET_PRINTER_COUNT()
-        //                 let tempPrinterInfo = null
-        //                 for (let index = 1; index < printerNum + 1; index++) {
-        //                     let name = LODOP.GET_PRINTER_NAME(index - 1)
-        //                     let isDefault = false
-        //                     if(LODOP.GET_PRINTER_NAME(-1) === name)isDefault = true
-        //                     tempPrinterInfo = {
-        //                         name: name,
-        //                         default: isDefault
-        //                     }
-        //                     this.printArray.push(tempPrinterInfo)
-        //                 }
-        //             }
-        //         }, 500)
-        //     } else {
-        //         console.log("Printer server error");
-        //     }
-        // },
-        // getPrinterFromServerMethod(){
-        //     let printArray = localStorage.getItem('printerList')
-        //     if(printArray){
-        //         this.printArray_server = JSON.parse(printArray)
-        //     }else{
-        //         this.$notify({
-        //             title: this.lang === 'en'?'Tips': '提示',
-        //             message: this.lang === 'en'?'Get print info failed': '获取打印机失败，请添加打印机'
-        //         })
-        //     }
-        // },
-        // editPrintServerMethod(value){
-        //     console.log(value)
-        //     let setting = {
-        //         printerServer: value
-        //     }
-        //     localStorage.setItem('emenuSetting',JSON.stringify(setting))
-        // }
+        }
        
     }
 }
