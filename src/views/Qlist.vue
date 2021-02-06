@@ -1,5 +1,5 @@
 <template>
-    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 100%;">
+    <div id="qlist" style="width: 100%;">
         <div style="width: 100%;">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
@@ -11,7 +11,7 @@
                             <div style="font-weight: bold;">{{ item.name }}</div>
                         </div>
                         <div style="width: 30%; display: flex">
-                            <div style="margin-left: 120px;">{{ item.size }}</div>
+                            <div>{{ item.size }}</div>
                             <img src="../../public/img/icons/person_dark.svg" alt="people"/>
                             <!-- //TODO: add @click -->
                             <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>

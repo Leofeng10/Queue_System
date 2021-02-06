@@ -162,11 +162,11 @@
                         
                     <div style="padding-bottom: 30px; display:flex;  font-size:20px; font-weight:600; ">
                         <span style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "姓氏 : ": "Last Name : "}}</span>
-                        <cube-input v-model="LastName" placeholder="Last Name" style="border:solid black 1px; border-radius:10px;"></cube-input>
+                        <cube-input v-model="LastName" placeholder="Last Name" style="border:solid black 1px; border-radius:10px; margin-left: 15px;"></cube-input>
                     </div>
                     <div style="padding-bottom: 10px; display:flex;  font-size:20px; font-weight:600;" >
                         <span  style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "电话 : ": "Phone Number : "}}</span>
-                        <cube-input v-model="phoneNumber" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px;"></cube-input>
+                        <cube-input v-model="phoneNumber" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px; margin-left: 15px;"></cube-input>
                     </div>
                     
                     

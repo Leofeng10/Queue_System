@@ -68,7 +68,7 @@
         </div>
       </div>
       <!-- right part -->
-      <div style="margin-left:70%">
+      <div style="margin-left:70%; width: 30%; background-color: #e2e2e2d8; height: calc(100vh);">
        
         <Qlist/>
       </div>
