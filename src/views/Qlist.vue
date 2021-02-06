@@ -5,15 +5,19 @@
             <!-- The Queuing List Starts -->
             <div v-for="item in qArray" v-bind:key="item.index">
                 <div class="info">
-                    <div style="display: flex;">
-                        <div style="font-weight: bold;">{{ item.gender }}</div>
-                        <div style="font-weight: bold;">{{ item.name }}</div>
-                        <div style="margin-left: 120px;">{{ item.size }}</div>
-                        <img src="../../public/img/icons/person_dark.svg" alt="people"/>
-                         <!-- //TODO: add @click -->
-                        <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>
+                    <div style="display: flex; justify-content: center;">
+                        <div style="width: 70%; display: flex">
+                            <div style="font-weight: bold;">{{ item.gender }}</div>
+                            <div style="font-weight: bold;">{{ item.name }}</div>
+                        </div>
+                        <div style="width: 30%; display: flex">
+                            <div style="margin-left: 120px;">{{ item.size }}</div>
+                            <img src="../../public/img/icons/person_dark.svg" alt="people"/>
+                            <!-- //TODO: add @click -->
+                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>
+                        </div>
                     </div>
-                    <div style="padding: 10px 0px 0px 0px;">{{ item.phoneNumber }}</div>
+                    <div style="padding: 10px 0px 0px 120px;">{{ item.phoneNumber }}</div>
                 </div>
             </div>
             <div style="height: 70px;"></div>

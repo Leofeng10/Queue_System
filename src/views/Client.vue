@@ -86,7 +86,7 @@
     <!-- Body start here -->
     <div class="clientBody">
         <div style="height:10%;display:flex;justify-content:center; align-items:center;font-size:30px">
-            <span>{{lang === 'ch'? "欢迎光临！ 请选择用餐人数" : "Welcome！ Please select your table size"}}</span>
+            <span>{{lang === 'ch'? "欢迎光临！ 请选择用餐人数" : "Welcome！ Please select the table size"}}</span>
         </div>
         <div class="chooseTableType">
             <div class="tabletype1" @click="openInputInfoBox(2)">
@@ -100,7 +100,7 @@
             <div class="tabletype3" @click="openInputInfoBox(8)">
                 <span>5 - 8</span>
             </div>
-            <div class="tabletype4" @click="openInputInfoBox(10)">
+            <div class="tabletype4" @click="openInputInfoBox(9)">
                 <span>> 8</span>
             </div>
         </div>
@@ -111,110 +111,124 @@
         style="color: #666; width: 60%; height: calc(60vh); border-radius: 30px"
         :z-index="11">
         <div style="height:100%">
-            <div style="height:10% ">
-                <div style="height:20%"></div>
-                <div v-if="tableSeat===2" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+            <div style="height:15% ">
+                <div style="height:30%"></div>
+                <div v-if="tableSeat===2" style="font-size:25px; padding:20px; font-weight:600;">
                     {{lang==='ch' ? "用餐人数： 1 - 2 人": "Table for 2 persons"}}
                 </div>
-                <div v-else-if="tableSeat===4" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                <div v-else-if="tableSeat===4" style="font-size:25px; padding:20px; font-weight:600;">
                     {{lang==='ch' ? "用餐人数： 3 - 4 人": "Table for 4 persons"}}
                 </div>
-                <div v-else-if="tableSeat===8" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                <div v-else-if="tableSeat===8" style="font-size:25px; padding:20px; font-weight:600;">
                     {{lang==='ch' ? "用餐人数： 5 - 8 人": "Table for 8 persons"}}
                 </div>
-                <div v-else-if="tableSeat===10" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                <div v-else-if="tableSeat===9" style="font-size:25px; padding:25px; font-weight:600;">
                     {{lang==='ch' ? "用餐人数： 8 人 以 上": "Table for more than 9 persons"}}
                 </div>
-                <div style="padding:0px 0px 10px 20px;display:flex">
-                    <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "预计需要等待时间 : ": "Estimated Waiting Time : "}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{waitingTime}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 分钟':' mins'}}</span>
-                    
-                </div>
-                <div style="padding:0px 0px 10px 20px;display:flex">
-                    <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "前面等待桌数 : ": "Ahead : "}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{waitingTable}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 桌':' Tables'}}</span>
-                    
+                <div style="padding:20px; font-size:25px; font-weight:600;">
+                    {{lang==='ch'? "预计需要等待时间 : ": "Waiting Time : "}}
                 </div>
             </div>
-            <div style="height:15%">
+            <div style="height:13%">
 
             </div>
           
             <div style="height:4%; padding:20px; font-size:25px; font-weight:600;">
                 {{lang === 'ch' ?"请输入个人信息开始排队候餐" :"Please enter your Info to start queueing"}}
             </div>
-            <div style="justify-content:center;display:flex; height:50%">
+            <div style="justify-content:center;display:flex; height:40%">
                 <div style="padding: 18px;">
                     <div style="display:flex; justify-content:space-around; padding-bottom:30px;">
                       
-                        <div style="align-self:center;  font-size:20px; font-weight:600;">{{lang==='ch' ? "称呼: ": "Gender: "}}</div>
+                        <div style="align-self:center;  font-size:20px; font-weight:600;">{{lang==='ch' ? "姓别: ": "Gender: "}}</div>
                        
                        <div>
-                            <el-radio v-model="radio" label="Mrs." border size="small">Mrs.</el-radio>
-                            <el-radio v-model="radio" label="Mr." border size="small">Mr.</el-radio>
-                            <el-radio v-model="radio" label="Ms." border size="small">Ms.</el-radio>
-                            <el-radio v-model="radio" label="Miss." border size="small">Miss.</el-radio>
+                            <el-radio v-model="radio" label="1" border size="small">Mrs.</el-radio>
+                            <el-radio v-model="radio" label="2" border size="small">Mr.</el-radio>
+                            <el-radio v-model="radio" label="3" border size="small">Ms.</el-radio>
+                            <el-radio v-model="radio" label="4" border size="small">Miss.</el-radio>
                         </div>
                     </div>
-             
                         
                     <div style="padding-bottom: 30px; display:flex;  font-size:20px; font-weight:600; ">
                         <span style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "姓氏 : ": "Last Name : "}}</span>
-                        <cube-input v-model="LastName" placeholder="Last Name" style="border:solid black 1px; border-radius:10px;"></cube-input>
+                        <cube-input v-model="newCustomer.name" placeholder="Last Name" style="border:solid black 1px; border-radius:10px;"></cube-input>
                     </div>
                     <div style="padding-bottom: 10px; display:flex;  font-size:20px; font-weight:600;" >
                         <span  style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "电话 : ": "Phone Number : "}}</span>
-                        <cube-input v-model="phoneNumber" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px;"></cube-input>
+                        <cube-input v-model="newCustomer.tel" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px;"></cube-input>
                     </div>
-                    
-                    
-                    
+		
 			    </div>
 
             </div>
             
-            <div style="display: flex;justify-content:center; height:3%;">
+
+            
+            <div style="display: flex;justify-content:center; height:20%">
 				<div style="margin: 0 10px">
 					<nut-button type="light" @click="isShowInputInfoBox=false">{{lang==='en'? "Cancel":"取消"}}</nut-button>
 				</div>
 				<div style="margin: 0 10px">
-					<nut-button @click="addQueueMethod()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
+					<nut-button @click="startQ()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
 				</div>
 			</div>
         </div>
     </nut-popup>
+
+     <!-- start table bill start -->
+        <div style="display: none">
+            <div id="qrcode_bill">
+                <div style="display: flex;flex-direction: column;align-items: center;">
+                    <div style="display:flex;width:300px;padding-left:30px">
+                    </div>
+                    <div style="font-size: 20px;height: 40px;line-height: 40px;">
+                        <span>{{restaurantName}}</span>
+                    </div>
+                    <div style="padding: 10px 0">
+                        <span>{{lang === 'en'? 'Scan QRcode to start': '扫描二维码开始点餐'}}</span>
+                    </div>
+                    <!-- <div style="padding: 10px 0">
+                        <img id="imgSrc">
+                    </div> -->
+                    <div style="padding: 10px 0 20px 0">
+                        <span>{{QRMessage}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- start table bill end -->
 </div>
 </template>
 
 <script>
-import axios from 'axios';
+import qrcode from 'qrcode'
+import getLodop from "../../public/js/lodop";
+
 export default{
-    created(){
-        this.getQueueArray();
-        this.getAllTableInfoMthod();
-        this.mynowTime = new Date().getTime()
-        setInterval(() => {
-            this.mynowTime = new Date().getTime()
-        }, 60000);
+    mounted() {
+        this.printerList = JSON.parse(localStorage.getItem("printerList"))
     },
     data() {
         return {
-            mynowTime: null,
             nowTime: "",
             isShowConfirmBox:false,
 			staffLoginBox:false,
             staffInfo: {},
             isShowInputInfoBox:false,
             tableSeat:0,
-            phoneNumber:null,
-            LastName:null,
+            newCustomer: {
+                name: null,
+                gender: false,
+                tel: null,
+                size: 0,
+            },
             radio:null,
-            qArray:[],
-            havingMealArray:[],
-            waitingTime:0,
-            waitingTable:0,
+            printerWithPrintQrCode: [],
+            printerList: null,
+            selectedPrinter: null,
+            isShowSelectPrinterForQrCode: false,
+            whichTable: null
         }
     },
     computed: {
@@ -239,101 +253,19 @@ export default{
         }
         return tempFlag;
         },
+        restaurantName(){
+            let name = null
+            if(localStorage.getItem('restaurantName')) name = localStorage.getItem('restaurantName') 
+            return name
+        },
+        QRMessage(){
+            return localStorage.getItem('QRmessage')
+        }
     },
     mounted() {
         this.nowTimes();
     },
     methods:{
-        getAllTableInfoMthod(){
-            this.activeTop = null
-            axios.get(this.$sysConfig.server + '/table').then(doc =>{
-                if(doc.data.code === 0){
-                    console.log("------------------")
-                    console.log(doc);
-                    this.tableArray = doc.data.doc
-                }else{
-                    this.tipsShowColor = 'yellow'
-                    this.tipsInfo = '未找到可用餐桌'
-                    this.isShowTipsBox = true
-                    setTimeout(() => {
-                        this.isShowTipsBox = false
-                    }, 2000);
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        },
-        countWaitingTimeMethod(tableType){
-            console.log(this.tableArray)
-            // for(var i = 0 ; i< this.tableArray.length; i++){
-            //     console.log(this.tableArray[i].tableSeat)
-            //     if(this.tableArray[i].tableSeat ===tableType){
-            //         console.log("yes")
-            //         this.havingMealArray.push(parseInt((this.tableArray.orderId.newMealTime - nowTime) /60000))
-            //         console.log(parseInt((this.tableArray.orderId.newMealTime - nowTime) /60000));
-            //     }
-            // }
-            this.waitingTable=0
-            
-            for(var i = 0; i < this.qArray.length; i++){
-                if(tableType === this.qArray[i].size){
-                    this.waitingTime +=90
-                    this.waitingTable++;
-                }
-            }
-
-            for(var i = 0; i < this.tableArray.length;i++){
-                console.log("waiting" + this.waitingTime)
-                console.log((this.tableArray[i].orderId.newMealTime - this.mynowTime)/60000)
-
-                //现在把所有桌子的时间计算进去了，因为我这边控制台没有更新餐桌容量的功能，因此无法计算每种餐桌容量的桌子所需时间
-                
-                if(this.tableArray[i].status && i > 0){
-                    this.waitingTime -=Math.floor(((this.tableArray[i].orderId.newMealTime - this.mynowTime)/60000)) 
-                    this.waitingTime-=90
-                    this.waitingTime.toFixed(1);
-                   console.log("-------" + i)
-                }
-                
-            }
-        },
-        getQueueArray(){
-           axios.get(this.$sysConfig.server + '/queue/getQueue').then(doc => {
-               console.log(doc)
-                if(doc.data.code === 0){
-                    this.qArray = doc.data.doc
-                   console.log("array success")
-                }else if(doc.data.code === 2){
-              
-                    console.log("failed")
-                }else{
-                   
-                }
-           })
-        },
-        addQueueMethod(){
-            console.log(this.radio)
-            console.log(this.LastName)
-            console.log(this.phoneNumber)
-            axios.post(this.$sysConfig.server + "/queue/createQueue",{
-                gender:this.radio,
-                name:this.LastName,
-                phoneNumber:this.phoneNumber,
-                size:this.tableSeat
-            }).then(doc => {
-                console.log(doc)
-                if(doc.data.code === 200){
-                   console.log("success")
-                }else if(doc.data.code === 400){
-                    this.getTable();
-                    console.log("failed")
-                }else{
-                   
-                }
-            })
-            this.isShowInputInfoBox = false;
-        },
-        
         openSettingMethod() {
             this.$router.push("/setup");
         },
@@ -417,12 +349,140 @@ export default{
 			this.$store.dispatch('setStaffLoginBox', true)
         },
         openInputInfoBox(tableSeat){
-            this.waitingTime = 0;
-            this.countWaitingTimeMethod(tableSeat);
             this.isShowInputInfoBox = true;
-            this.tableSeat  = tableSeat;
+            if(tableSeat===9){
+                this.tableSeat=9;
+            }else{
+                this.tableSeat  = tableSeat;
+ 
+            }
             console.log(this.tableSeat)
-        }
+        },
+        startQ() {
+            this.addQueueMethod();
+            this.openSelectPrinterForQrCode();
+        },
+        async addQueueMethod(){
+            await axios.post(this.$sysConfig.server + "/queue/createQueue",{
+                gender:this.newCustomer.gender,
+                name:this.newCustomer.name,
+                phoneNumber:this.newCustomer.tel,
+                size:this.newCustomer.size
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{ 
+                }
+            })
+            this.getQueueArray();
+            this.popupVisible = false
+        },
+        async getQueueId() {
+            await axios.post(this.$sysConfig.server + "/queue/getQueue", {
+
+            }).then(doc => {
+                console.log(doc)
+                if(doc.data.code === 200){
+                   console.log("success")
+                   this.tempId = doc._id
+                }else if(doc.data.code === 400){
+                    this.getTable();
+                    console.log("failed")
+                }else{ 
+                }
+            })
+        },
+        openSelectPrinterForQrCode(){
+            this.printerWithPrintQrCode = []
+            this.printerList.forEach(printerInfo =>{
+                if(printerInfo.isPrintQRcode){
+                    this.printerWithPrintQrCode.push(printerInfo)
+                }
+            })
+            if(this.printerWithPrintQrCode.length>1){
+                this.isShowSelectPrinterForQrCode = true
+            }
+            else{
+                this.selectedPrinter = this.printerWithPrintQrCode[0]
+                this.printQrCodeMethod(this.selectedPrinter)
+            }
+        },
+        printQrCodeMethod(item){
+            console.log(item)
+            let LODOP = getLodop()
+            let options ={
+                margin:0,
+                version:4
+            }
+            qrcode.toDataURL(this.$sysConfig.client + "/?id="+ this.tempId,options)
+            .then(url => {
+                // document.getElementById("imgSrc").src = url;
+                if (LODOP) {
+                    let hasPrint = false
+                        if(item.isPrintQRcode){
+                            hasPrint = true
+                            let strFormHtml ='<body>' + document.getElementById('qrcode_bill').innerHTML + '</body>'   //获取打印内容
+                            LODOP.PRINT_INIT('QRcode' + new Date())  //初始化
+                            LODOP.SET_PRINT_STYLE("FontName","隶书")
+                            LODOP.SET_PRINT_STYLE("FontSize",11)
+                            LODOP.SET_PRINT_PAGESIZE(3, 800, 0)  //设置横向 1 纵向 2 横向 3高度自适应
+                            LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', strFormHtml)    //设置打印内容 
+                            LODOP.SET_PREVIEW_WINDOW(2, 0, 0, 800, 600, '')  //设置预览窗口模式和大小
+                            // LODOP.PREVIEW()//打印前预览
+                            LODOP.SET_PRINTER_INDEXA(item.printerName)
+                            LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS",true);
+                            async function getJobCodeMethod(){
+                                return new Promise(async resolve =>{
+                                    LODOP.On_Return=function(TaskID,Value){
+                                        resolve(Value)
+                                    }
+                                })
+                            }
+                            getJobCodeMethod()
+                            .then(async tempJobCode =>{
+                                let a = await this.checkPrintError(tempJobCode,strFormHtml,item.printerName)
+                            })
+                            LODOP.PRINT()//直接打印
+                        }
+                    if(!hasPrint){
+                        LODOP.PRINT_INIT('QRcode'+ new Date())  //初始化
+                        LODOP.SET_PRINT_STYLE("FontName","隶书")
+                        LODOP.SET_PRINT_STYLE("FontSize",11)
+                        LODOP.SET_PRINT_PAGESIZE(3, 800, 0)  //设置横向 1 纵向 2 横向 3高度自适应
+                        LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', strFormHtml)    //设置打印内容 
+                        LODOP.SET_PREVIEW_WINDOW(2, 0, 0, 800, 600, '')  //设置预览窗口模式和大小
+                        // LODOP.PREVIEW()//打印前预览
+                        LODOP.SET_PRINTER_INDEXA(-1)
+                        LODOP.SET_PRINT_MODE("CATCH_PRINT_STATUS",true);
+                        async function getJobCodeMethod(){
+                            return new Promise(async resolve =>{
+                                LODOP.On_Return=function(TaskID,Value){
+                                    resolve(Value)
+                                }
+                            })
+                        }
+                        getJobCodeMethod()
+                        .then(async tempJobCode =>{
+                            let a = await this.checkPrintError(tempJobCode,strFormHtml,item.printerName)
+                        })
+                        LODOP.PRINT()//直接打印
+                    }
+                }else{
+                    this.$notify({
+                        title: '提示',
+                        message: '未找到打印机服务器，请确认连接地址正确或打印机服务是否正常'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
+            this.isShowSelectPrinterForQrCode = false
+          }
     }
     
 }
