@@ -39,9 +39,14 @@
           <div
             v-for="(item, index) in capacityArray"
             v-bind:key="index"
-            class="capacity"
           >
-            <div @click="changePage(item)" :class="item.choosed ? 'choosed' : ''">{{ item.name }}</div>
+            <div @click="changePage(item)" style="padding: 2px 8px">
+              <div class="capacity">
+                <div :class="item.choosed ? 'choosed' : ''">
+                    {{ item.name }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -417,7 +422,6 @@ export default {
   border-radius: 7px;
   height: 34px;
   width: 60px;
-  margin: 0 8px;
   display: flex;
   align-items: center;
   justify-content: center;
