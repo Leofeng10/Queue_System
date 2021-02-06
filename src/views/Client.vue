@@ -1,22 +1,23 @@
 <template>
 <div id="client">
-        <div id="headpart">
-      <div class="headpart_left">
-        <div @click="logOutMethod()">
-          <img
-            src="../../public/img/pic/logoutImage.svg"
-            alt=""
-            style="width: 30px; height: 30px"
-          />
-        </div>
-      </div>
+    <div id="headpart">
+
       <div class="headpart_center">
         {{ nowTime }}
       </div>
       <div class="headpart_right">
-        <div style="color:white; font-size:20px;" @click="staffLoginmethod()">
-			{{lang === 'en' ? 'Staff Login': '员工登录'}}
-		</div>
+          <div style="display:flex; justify-content:space-between;">
+               <div style="color:white; font-size:20px; " @click="changeLanguageMethod()">
+                    {{lang ==='en'? "中文" : "English"}}
+                </div>
+                <div style="width:10px;">
+
+                </div>
+                <div style="color:white; font-size:20px;" @click="staffLoginmethod()">
+                    {{lang === 'en' ? 'Staff Login': '员工登录'}}
+                </div>
+          </div>
+       
       </div>
       <nut-popup
         v-model="isShowConfirmBox"
@@ -58,8 +59,8 @@
         </div>
       </nut-popup>
   
-        <nut-popup v-model="staffLoginBox" style=" color: #666;height:260px; width:30%;border-radius:20px" class="home_success" :close-on-click-overlay="false" :z-index="11"  >
-            <div style="background-color: #202a39; height: 20%; color:white; display:flex; align-items:center; font-size:20px;">
+        <nut-popup v-model="staffLoginBox" style=" color: #666;height:260px; width:30%;border-radius:20px;" class="home_success" :close-on-click-overlay="false" :z-index="11"  >
+            <div style="background-color: #202a39; height: 30%; color:white; display:flex; align-items:center; font-size:20px;">
                 <span style="margin-left:5%;">{{lang==='en'? "Staff Log In":"请使用员工账号登录"}}</span>
             </div>
 			
@@ -84,6 +85,7 @@
     </div>
 
     <!-- Body start here -->
+    <div style="height: calc(7vh)"></div>
     <div class="clientBody">
         <div style="height:10%;display:flex;justify-content:center; align-items:center;font-size:30px">
             <span>{{lang === 'ch'? "欢迎光临！ 请选择用餐人数" : "Welcome！ Please select your table size"}}</span>
@@ -108,40 +110,40 @@
 
     <nut-popup
         v-model="isShowInputInfoBox"
-        style="color: #666; width: 60%; height: calc(60vh); border-radius: 30px"
+        style="color: #666; width: 60%; height: calc(60vh); border-radius: 30px;"
         :z-index="11">
         <div style="height:100%">
-            <div style="height:10% ">
-                <div style="height:20%"></div>
-                <div v-if="tableSeat===2" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
-                    {{lang==='ch' ? "用餐人数： 1 - 2 人": "Table for 2 persons"}}
-                </div>
-                <div v-else-if="tableSeat===4" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
-                    {{lang==='ch' ? "用餐人数： 3 - 4 人": "Table for 4 persons"}}
-                </div>
-                <div v-else-if="tableSeat===8" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
-                    {{lang==='ch' ? "用餐人数： 5 - 8 人": "Table for 8 persons"}}
-                </div>
-                <div v-else-if="tableSeat===10" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
-                    {{lang==='ch' ? "用餐人数： 8 人 以 上": "Table for more than 9 persons"}}
-                </div>
-                <div style="padding:0px 0px 10px 20px;display:flex">
-                    <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "预计需要等待时间 : ": "Estimated Waiting Time : "}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{waitingTime}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 分钟':' mins'}}</span>
-                    
-                </div>
-                <div style="padding:0px 0px 10px 20px;display:flex">
-                    <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "前面等待桌数 : ": "Ahead : "}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{waitingTable}}</span>
-                    <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 桌':' Tables'}}</span>
-                    
+            <div style="background-color: #202a39;">
+                 <div style="color:white; ">
+                   
+                    <div v-if="tableSeat===2" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                        {{lang==='ch' ? "用餐人数： 1 - 2 人": "Table for 2 persons"}}
+                    </div>
+                    <div v-else-if="tableSeat===4" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                        {{lang==='ch' ? "用餐人数： 3 - 4 人": "Table for 4 persons"}}
+                    </div>
+                    <div v-else-if="tableSeat===8" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                        {{lang==='ch' ? "用餐人数： 5 - 8 人": "Table for 8 persons"}}
+                    </div>
+                    <div v-else-if="tableSeat===10" style="font-size:25px; padding:10px 0px 10px 20px; font-weight:600;">
+                        {{lang==='ch' ? "用餐人数： 8 人 以 上": "Table for more than 9 persons"}}
+                    </div>
+                    <div style="padding:0px 0px 10px 20px;display:flex; background-color: #202a39;">
+                        <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "预计需要等待时间 : ": "Estimated Waiting Time : "}}</span>
+                        <span style=" font-size:25px; font-weight:600;">{{waitingTime}}</span>
+                        <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 分钟':' mins'}}</span>
+                        
+                    </div>
+                    <div style="padding:0px 0px 10px 20px;display:flex; background-color:#202a39;">
+                        <span style=" font-size:25px; font-weight:600;">{{lang==='ch'? "前面等待桌数 : ": "Ahead : "}}</span>
+                        <span style=" font-size:25px; font-weight:600;">{{waitingTable}}</span>
+                        <span style=" font-size:25px; font-weight:600;">{{lang === 'ch'? ' 桌':' Tables'}}</span>
+                        
+                    </div>
                 </div>
             </div>
-            <div style="height:15%">
-
-            </div>
-          
+           
+           
             <div style="height:4%; padding:20px; font-size:25px; font-weight:600;">
                 {{lang === 'ch' ?"请输入个人信息开始排队候餐" :"Please enter your Info to start queueing"}}
             </div>
@@ -162,11 +164,11 @@
                         
                     <div style="padding-bottom: 30px; display:flex;  font-size:20px; font-weight:600; ">
                         <span style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "姓氏 : ": "Last Name : "}}</span>
-                        <cube-input v-model="LastName" placeholder="Last Name" style="border:solid black 1px; border-radius:10px; margin-left: 15px;"></cube-input>
+                        <input v-model="LastName" placeholder="Last Name" style="border:solid black 1px;  border-radius:5px; font-size:15px; width:250px;height:25px;"/>
                     </div>
                     <div style="padding-bottom: 10px; display:flex;  font-size:20px; font-weight:600;" >
                         <span  style="align-self:center; font-weight:600;display:flex; justify-content:flex-start;">{{lang==='ch' ? "电话 : ": "Phone Number : "}}</span>
-                        <cube-input v-model="phoneNumber" placeholder="Phone NUmber" style="border:solid black 1px;  border-radius:10px; margin-left: 15px;"></cube-input>
+                        <input v-model="phoneNumber" placeholder="Phone Number" style="border:solid black 1px;  border-radius:5px; font-size:15px; width:250px;height:25px;"/>
                     </div>
                     
                     
@@ -175,11 +177,11 @@
 
             </div>
             
-            <div style="display: flex;justify-content:center; height:3%;">
-				<div style="margin: 0 10px">
+            <div style="display: flex;justify-content:center;">
+				<div style="margin: 0 50px">
 					<nut-button type="light" @click="isShowInputInfoBox=false">{{lang==='en'? "Cancel":"取消"}}</nut-button>
 				</div>
-				<div style="margin: 0 10px">
+				<div style="margin: 0 50px">
 					<nut-button @click="addQueueMethod()">{{lang==='en'? "Confirm":"确认"}}</nut-button>
 				</div>
 			</div>
@@ -244,12 +246,22 @@ export default{
         this.nowTimes();
     },
     methods:{
+         changeLanguageMethod(){
+            if(this.lang === 'en'){
+                this.$store.dispatch('setLanguage', 'ch')
+                localStorage.setItem('language','ch')
+                this.lang = 'ch'
+            }else{
+                this.$store.dispatch('setLanguage', 'en')
+                localStorage.setItem('language','en')
+                this.lang='en'
+            }
+            
+        },
         getAllTableInfoMthod(){
             this.activeTop = null
             axios.get(this.$sysConfig.server + '/table').then(doc =>{
                 if(doc.data.code === 0){
-                    console.log("------------------")
-                    console.log(doc);
                     this.tableArray = doc.data.doc
                 }else{
                     this.tipsShowColor = 'yellow'
@@ -263,41 +275,33 @@ export default{
                 console.log(err)
             })
         },
+
+        //计算等待时间
         countWaitingTimeMethod(tableType){
-            console.log(this.tableArray)
-            // for(var i = 0 ; i< this.tableArray.length; i++){
-            //     console.log(this.tableArray[i].tableSeat)
-            //     if(this.tableArray[i].tableSeat ===tableType){
-            //         console.log("yes")
-            //         this.havingMealArray.push(parseInt((this.tableArray.orderId.newMealTime - nowTime) /60000))
-            //         console.log(parseInt((this.tableArray.orderId.newMealTime - nowTime) /60000));
-            //     }
-            // }
-            this.waitingTable=0
-            
+            this.waitingTable=0            
             for(var i = 0; i < this.qArray.length; i++){
                 if(tableType === this.qArray[i].size){
                     this.waitingTime +=90
                     this.waitingTable++;
                 }
             }
+
             for(var i = 0; i < this.tableArray.length;i++){
-                console.log("waiting" + this.waitingTime)
-                console.log((this.tableArray[i].orderId.newMealTime - this.mynowTime)/60000)
+
                 //现在把所有桌子的时间计算进去了，因为我这边控制台没有更新餐桌容量的功能，因此无法计算每种餐桌容量的桌子所需时间
                 
                 if(this.tableArray[i].status && i > 0){
                     this.waitingTime -=Math.floor(((this.tableArray[i].orderId.newMealTime - this.mynowTime)/60000)) 
                     this.waitingTime-=90
                     this.waitingTime.toFixed(1);
-                   console.log("-------" + i)
                 }
                 
             }
         },
+
+        //获取队列
         getQueueArray(){
            axios.get(this.$sysConfig.server + '/queue/getQueue').then(doc => {
-               console.log(doc)
                 if(doc.data.code === 0){
                     this.qArray = doc.data.doc
                    console.log("array success")
@@ -309,17 +313,15 @@ export default{
                 }
            })
         },
+
+        //添加等候队列
         addQueueMethod(){
-            console.log(this.radio)
-            console.log(this.LastName)
-            console.log(this.phoneNumber)
             axios.post(this.$sysConfig.server + "/queue/createQueue",{
                 gender:this.radio,
                 name:this.LastName,
                 phoneNumber:this.phoneNumber,
                 size:this.tableSeat
             }).then(doc => {
-                console.log(doc)
                 if(doc.data.code === 200){
                    console.log("success")
                 }else if(doc.data.code === 400){
@@ -329,6 +331,9 @@ export default{
                    
                 }
             })
+            this.LastName = null;
+            this.phoneNumber=null;
+            this.radio = null;
             this.isShowInputInfoBox = false;
         },
         
@@ -357,11 +362,12 @@ export default{
 			let hh =new Date(timeStamp).getHours() < 10? "0" + new Date(timeStamp).getHours(): new Date(timeStamp).getHours();
 			let mm =new Date(timeStamp).getMinutes() < 10? "0" + new Date(timeStamp).getMinutes(): new Date(timeStamp).getMinutes();
 			let ss =new Date(timeStamp).getSeconds() < 10? "0" + new Date(timeStamp).getSeconds(): new Date(timeStamp).getSeconds();
-			this.nowTime = hh+":"+mm+':'+ss + "  " + date + "/" + month + "/"+ year;
+			this.nowTime = hh+":"+mm + "  " + date + "/" + month + "/"+ year;
+
 		},
 		nowTimes(){
 		this.timeFormate(new Date());
-		setInterval(this.nowTimes,1000);
+		setInterval(this.nowTimes,60000);
 		this.clear()
 		},
 		clear(){
@@ -380,7 +386,6 @@ export default{
 				password: this.staffInfo.password,
 				}
 			);
-			console.log(checkInfo);
 			if (checkInfo.data.code === 200) {
 				this.staffLoginBox = false;
 				this.$router.push("/");
@@ -392,7 +397,6 @@ export default{
 		},
 		staffLoginmethod(){
 			this.staffLoginBox = true
-			// this.$router.push('/')
 		},
 		openSettingMethod(){
 			this.$router.push('/setup')
@@ -418,7 +422,6 @@ export default{
             this.countWaitingTimeMethod(tableSeat);
             this.isShowInputInfoBox = true;
             this.tableSeat  = tableSeat;
-            console.log(this.tableSeat)
         }
     }
     
@@ -426,6 +429,10 @@ export default{
 </script>
 
 <style>
+#headpart{
+    display: flex;
+    justify-content: space-between;
+}
 #client{
     background-color: rgb(216, 240, 247);
   
@@ -468,4 +475,5 @@ export default{
     
     background-color: rgb(130, 131, 219);
 }
+
 </style>
