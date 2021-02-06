@@ -99,10 +99,9 @@ export default {
             axios.post(this.$sysConfig.server + "/setup/get").then(doc =>{
                 if(doc.data.code === 0){
                     this.Image = doc.data.doc.image
-					this.BackgroundImage = doc.data.doc.backgroundimage
-					localStorage.setItem('restaurantName', doc.data.doc.restaurantName)
-					localStorage.setItem('QRmessage', doc.data.doc.QRmessage)
-
+                    this.BackgroundImage = doc.data.doc.backgroundimage
+					
+                    console.log("7777777")
                     console.log(doc.data.doc)
 					
                 }
