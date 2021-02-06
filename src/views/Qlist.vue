@@ -1,5 +1,5 @@
 <template>
-    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 30%;">
+    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width: 100%;">
         <div style="width: 100%;">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
@@ -150,7 +150,7 @@ export default {
 .heading {
     font-weight: bold;
     font-size: 26px;
-    margin: 10px 0 10px 10px;
+    padding: 10px 0 10px 10px;
     font-family: 'Ropa Sans', sans-serif;
     color: #ff7f50;
     max-height: 500px;
