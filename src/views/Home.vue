@@ -46,23 +46,45 @@
         </div>
 
         <!-- Tables -->
-        <div class="container">
-          <div
-            v-for="(item, index) in tableArray" 
-            v-bind:key="index"
-            v-if="item.tableSeat <= maxCap && item.tableSeat > minCap"
-            class="table"
-            :class="item.tableSeat <= 2
+        <div>
+          <div v-if="this.capacityArray[0].choosed" class="container">
+            <div
+              v-for="(item, index) in tableArray" 
+              v-bind:key="index"
+            >
+              <div class="table"
+                :class="item.tableSeat <= 2
                       ? (item.status ? 'table1' : 'table1_2')
                       : item.tableSeat <= 4 ? (item.status ? 'table2' : 'table2_2')
                                       : item.tableSeat <= 8 ? (item.status ? 'table3' : 'table3_2')
-                                                      : item.status ? 'table4' : 'table4_2'"
-          >
-            <div style="height: 20px; width: 100%;"></div>
-            <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
-            <div style="display: flex; width: 100%; justify-content: flex-end;">
-              <div style="position: relative;">{{ item.tableSeat }}</div>
-              <img src="../../public/img/icons/person.svg" alt="people">
+                                                      : item.status ? 'table4' : 'table4_2'">
+                <div style="height: 20px; width: 100%;"></div>
+                <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
+                <div style="display: flex; width: 100%; justify-content: flex-end;">
+                  <div style="position: relative;">{{ item.tableSeat }}</div>
+                  <img src="../../public/img/icons/person.svg" alt="people">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="container">
+            <div
+              v-for="(item, index) in selectedTableArray" 
+              v-bind:key="index"
+            >
+              <div class="table"
+                :class="item.tableSeat <= 2
+                      ? (item.status ? 'table1' : 'table1_2')
+                      : item.tableSeat <= 4 ? (item.status ? 'table2' : 'table2_2')
+                                      : item.tableSeat <= 8 ? (item.status ? 'table3' : 'table3_2')
+                                                      : item.status ? 'table4' : 'table4_2'">
+                <div style="height: 20px; width: 100%;"></div>
+                <div style="height: 40px; font-size: 28px; padding-top: 5px;">{{ item.num }}</div>
+                <div style="display: flex; width: 100%; justify-content: flex-end;">
+                  <div style="position: relative;">{{ item.tableSeat }}</div>
+                  <img src="../../public/img/icons/person.svg" alt="people">
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -99,14 +121,14 @@
               <nut-button
                 type="light"
                 @click="isShowConfirmBox = false"
-                style="padding: 10px 50px 10px 50px"
+                style="padding: 10px 40px 10px 40px"
                 >{{ lang === "en" ? "Cancel" : "取消" }}</nut-button
               >
             </div>
             <div style="margin: 0 10px">
               <nut-button
                 @click="confiormMethods()"
-                style="padding: 10px 50px 10px 50px"
+                style="padding: 10px 40px 10px 40px"
                 >{{ lang === "en" ? "Confirm" : "确定" }}</nut-button
               >
             </div>
@@ -244,6 +266,7 @@ export default {
           status: false
         },
       ],
+      selectedTableArray: this.tableArray,
       //实际餐桌
       tableList:[]
     };
@@ -316,6 +339,7 @@ export default {
         el.choosed = false;
       })
       item.choosed = true;
+      this.selectedTableArray = [];
       if (item.index === 0) {
         this.minCap = 0;
         this.maxCap = 100;
@@ -323,6 +347,11 @@ export default {
         this.minCap = this.capacityArray[item.index - 1].num;
         this.maxCap = item.num;
       }
+      this.tableArray.forEach((el) => {
+        if (el.tableSeat <= this.maxCap && el.tableSeat > this.minCap) {
+          this.selectedTableArray.push(el);
+        }
+      })
     },
 
     //将tableList改成tableArray即可显示实际餐桌
@@ -410,7 +439,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 4px solid #dddddd;
   border-radius: 20px;
   height: 80px;
   width: 120px;
