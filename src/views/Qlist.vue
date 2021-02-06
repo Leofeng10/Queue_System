@@ -1,23 +1,24 @@
 <template>
-    <div id="qlist" style="width: 100%;">
-        <div style="width: 100%;">
+    <div id="qlist" style="background-color: #e2e2e2d8; height: 100%; width:100%">
+        <div style="width:100%">
             <div class="heading">Queuing list</div>
             <!-- The Queuing List Starts -->
-            <div v-for="item in qArray" v-bind:key="item.index">
+            <div v-for="item in qArray" v-bind:key="item.index" style="background-color: #e2e2e2d8;">
                 <div class="info">
-                    <div style="display: flex; justify-content: center;">
-                        <div style="width: 70%; display: flex">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="display:flex;">
                             <div style="font-weight: bold;">{{ item.gender }}</div>
                             <div style="font-weight: bold;">{{ item.name }}</div>
                         </div>
-                        <div style="width: 30%; display: flex">
+                        
+                        <div style=" display:flex;">
                             <div>{{ item.size }}</div>
                             <img src="../../public/img/icons/person_dark.svg" alt="people"/>
-                            <!-- //TODO: add @click -->
-                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="deleteQueueMethods(item)"/>
+                            <img src="../../public/img/icons/remove.svg" alt="people" style="margin-left: 20px;" @click="openDeleteQueueMethods(item)"/>
                         </div>
+              
                     </div>
-                    <div style="padding: 10px 0px 0px 120px;">{{ item.phoneNumber }}</div>
+                    <div style="padding: 10px 0px 0px 0px;">{{ item.phoneNumber }}</div>
                 </div>
             </div>
             <div style="height: 70px;"></div>
@@ -60,6 +61,46 @@
             <el-button type="primary" @click="addQueueMethod()">确 定</el-button>
         </div>
         </el-dialog>
+
+        <nut-popup
+        v-model="comfirmDeleteBox"
+        style="color: #666; width: 30%; height: 200px; border-radius: 30px"
+        :z-index="11"
+      >
+        <div style="background-color: #202a39; height: 25%; align-items:center; display:flex;justify-content:center;">
+            <span style="color:white; font-size:25px; padding:5px;">{{lang === "ch" ? "提示" : "Notification"}}</span>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            height: 50%;
+            align-items: center;
+            font-size: 30px;
+          "
+        >
+          {{ lang === "en" ? "Confirm to delete" : "确认删除" }}
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-around">
+            <div style="margin: 0 10px">
+              <nut-button
+                type="light"
+                @click="comfirmDeleteBox = false"
+                style="padding: 10px 30px 10px 30px"
+                >{{ lang === "en" ? "Cancel" : "取消" }}</nut-button
+              >
+            </div>
+            <div style="margin: 0 10px">
+              <nut-button
+                @click=" deleteQueueMethods(deleteInfo);"
+                style="padding: 10px 30px 10px 30px"
+                >{{ lang === "en" ? "Confirm" : "确定" }}</nut-button
+              >
+            </div>
+          </div>
+        </div>
+      </nut-popup>
         
     </div>
 </template>
@@ -85,13 +126,20 @@ export default {
                 size: 0,
             },
             popupVisible: false,
+            comfirmDeleteBox:false,
+            deleteInfo:null,
          
         }
     },
     methods:{
+        openDeleteQueueMethods(item){
+            this.comfirmDeleteBox = true;
+            this.deleteInfo = item;
+           
+            
+        },
         getQueueArray(){
            axios.get(this.$sysConfig.server + '/queue/getQueue').then(doc => {
-               console.log(doc)
                 if(doc.data.code === 0){
                     this.qArray = doc.data.doc
                    console.log("array success")
@@ -104,16 +152,12 @@ export default {
            })
         },
         async addQueueMethod(){
-            console.log(this.radio)
-            console.log(this.LastName)
-            console.log(this.phoneNumber)
             await axios.post(this.$sysConfig.server + "/queue/createQueue",{
                 gender:this.newCustomer.gender,
                 name:this.newCustomer.name,
                 phoneNumber:this.newCustomer.tel,
                 size:this.newCustomer.size
             }).then(doc => {
-                console.log(doc)
                 if(doc.data.code === 200){
                    console.log("success")
                 }else if(doc.data.code === 400){
@@ -139,11 +183,11 @@ export default {
                 }
             });
             this.getQueueArray();
+            this.comfirmDeleteBox = false;
         }
 
     }
 }
-
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Ropa+Sans:ital@1&display=swap');
@@ -157,9 +201,10 @@ export default {
 
 }
 .info {
-    margin: 20px 0 0 30px;
+    padding: 20px 0 0 30px;
     height: 50px;
     font-size: 18px;
+    
 }
 .info img {
     width: 17px;
